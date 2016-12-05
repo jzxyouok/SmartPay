@@ -21,7 +21,6 @@ use Payment\Wechat\Parameters\WechatUnifiedOrderParameter;
  */
 class WechatPaymentProvider extends AbstractPaymentProvider
 {
-
     protected function handle($url, AbstractParameter $parameters)
     {
         $parameters->sign();
@@ -55,7 +54,17 @@ class WechatPaymentProvider extends AbstractPaymentProvider
     }
 
     /**
-     * 下单接口，支持扫码下单和普通下单
+     * 创建支付订单
+     * @param AbstractParameter $parameter
+     * @return WechatResult
+     */
+    public function createOrder(AbstractParameter $parameter)
+    {
+        return $this->unifiedOrder($parameter);
+    }
+
+    /**
+     * 下单接口，支持用户扫码下单和普通下单
      * @param AbstractParameter $parameters
      * @return WechatResult
      * @throws PaymentException

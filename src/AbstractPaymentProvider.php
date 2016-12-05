@@ -29,7 +29,19 @@ abstract class AbstractPaymentProvider
     }
 
     /**
-     * 开始下单
+     * 创建支付订单
+     * @param AbstractParameter $parameter
+     * @return mixed
+     */
+    abstract public function createOrder(AbstractParameter $parameter);
+    /**
+     * 商户扫码支付
+     * @param AbstractParameter $parameters
+     * @return mixed
+     */
+    abstract public function micropay(AbstractParameter $parameters);
+    /**
+     * 预生成订单，适用于用户扫码
      * @param AbstractParameter $parameters
      * @return mixed
      */
