@@ -1,0 +1,28 @@
+{
+  "name": "minho/smartpay",
+  "description": "集成支付宝、微信支付等流行的支付接口",
+  "keywords": [
+    "支付宝支付",
+    "微信支付",
+    "PHP支付",
+    "支付sdk"
+  ],
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "homepage": "https://pay.iminho.me",
+  "authors": [
+    {
+      "name": "Minho",
+      "email": "longfei6671@163.com"
+    }
+  ],
+  "require": {
+    "php": ">=5.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "Payment\\": "src/"
+    },
+    "files": ["src/helpers.php"]
+  }
+}
