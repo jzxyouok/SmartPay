@@ -10,6 +10,8 @@ namespace Payment\Wechat\Parameters;
 
 
 use Payment\Exceptions\PaymentException;
+use Payment\Parameters\RefundQueryParameter;
+use Payment\Support\Traits\WechatParameterTrait;
 
 /**
  * Class WechatRefundQueryParemeter
@@ -23,11 +25,12 @@ use Payment\Exceptions\PaymentException;
  * @property string $sign_type 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
  * @property string $transaction_id 微信的订单号，优先使用
  * @property string $out_refund_no 商户系统内部的退款单号，商户系统内部唯一
- * @property string $out_trade_no 商户系统内部的订单号
  * @property string $ refund_id 微信生成的退款单号，在申请退款接口有返回
  */
-class WechatRefundQueryParemeter extends WechatParameter
+class WechatRefundQueryParemeter extends RefundQueryParameter
 {
+    use WechatParameterTrait;
+
     protected function buildData()
     {
         if(!array_key_exists('appid',$this->requestData)){

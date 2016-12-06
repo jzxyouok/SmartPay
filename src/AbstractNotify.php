@@ -43,15 +43,22 @@ abstract class AbstractNotify
             throw new PaymentException('获取通知数据失败');
         }
         //校验数据是否合法
-        $result = $this->verifySign($this->requestData);
+        $result = $this->verifySign();
 
         if($result === false){
             throw new PaymentException('签名校验失败');
         }
         //调用用户业务逻辑
         $processResult = $notify->process($this->requestData);
+
+        if ($processResult) {
+            $msg = 'OK';
+        } else {
+            $msg = '商户逻辑调用出错';
+        }
+
         //生成响应给第三方的数据
-        return $this->reply($processResult);
+        return $this->reply($processResult,$msg);
     }
 
     /**
@@ -65,12 +72,13 @@ abstract class AbstractNotify
      * @param array $data
      * @return bool
      */
-    abstract protected function verifySign(array $data);
+    abstract protected function verifySign();
 
     /**
      * 将处理结果响应给第三方
-     * @param $message
+     * @param string $message
+     * @param bool $isSuccess
      * @return mixed
      */
-    abstract protected function reply($message);
+    abstract protected function reply($isSuccess, $message);
 }

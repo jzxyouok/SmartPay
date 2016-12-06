@@ -13,7 +13,7 @@ namespace Payment\Wechat;
  * Class WechatPublicResult
  * @package Payment\Wechat
  */
-class WechatResult extends \Result
+class WechatResult extends \AbstractResult
 {
     public function code()
     {

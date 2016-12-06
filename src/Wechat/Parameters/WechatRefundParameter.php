@@ -10,6 +10,8 @@ namespace Payment\Wechat\Parameters;
 
 
 use Payment\Exceptions\PaymentException;
+use Payment\Parameters\RefundParameter;
+use Payment\Support\Traits\WechatParameterTrait;
 
 /**
  * Class WechatRefundParameter
@@ -30,24 +32,26 @@ use Payment\Exceptions\PaymentException;
  * @property string $refund_account 仅针对老资金流商户使用 : REFUND_SOURCE_UNSETTLED_FUNDS---未结算资金退款（默认使用未结算资金退款） / REFUND_SOURCE_RECHARGE_FUNDS---可用余额退款
  *
  */
-class WechatRefundParameter extends WechatParameter
+class WechatRefundParameter extends RefundParameter
 {
+    use WechatParameterTrait;
+
     protected function buildData()
     {
         if(!array_key_exists('appid',$this->requestData)){
-            $this->requestData['appid'] = $this->config->get('app_id');
+            $this->requestData['appid'] = $this->appid;
         }
         if(!array_key_exists('mch_id',$this->requestData)){
-            $this->requestData['mch_id'] = $this->config->get('mch_id');
+            $this->requestData['mch_id'] = $this->mch_id;
         }
         if(!array_key_exists('nonce_str',$this->requestData)){
             $this->requestData['nonce_str'] = create_random(32);
         }
-        if(!array_key_exists(' sign_type ',$this->requestData)){
-            $this->requestData[' sign_type '] = 'MD5';
+        if(!array_key_exists('sign_type',$this->requestData)){
+            $this->requestData['sign_type'] = 'MD5';
         }
         if(!array_key_exists('op_user_id',$this->requestData)){
-            $this->requestData['op_user_id'] = $this->config->get('mch_id');
+            $this->requestData['op_user_id'] = $this->mch_id;
         }
     }
 
@@ -60,7 +64,7 @@ class WechatRefundParameter extends WechatParameter
             throw new PaymentException('提交被扫支付API接口中，缺少必填参数 mch_id');
         }
 
-        if(!array_key_exists('transaction_id ',$this->requestData) && !array_key_exists('out_trade_no ',$this->requestData)){
+        if(!array_key_exists('transaction_id',$this->requestData) && !array_key_exists('out_trade_no',$this->requestData)){
             throw new PaymentException('订单查询接口中，out_trade_no、transaction_id至少填一个');
         }
         if(!array_key_exists('out_refund_no',$this->requestData)){

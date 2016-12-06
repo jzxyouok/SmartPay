@@ -2,41 +2,35 @@
 /**
  * Created by PhpStorm.
  * User: lifeilin
- * Date: 2016/12/5 0005
- * Time: 13:14
+ * Date: 2016/12/6 0006
+ * Time: 13:02
  */
 
-namespace Payment;
+namespace Payment\Parameters;
 
-use Payment\Configuration\PayConfiguration;
 use Payment\Exceptions\PaymentException;
-
 
 /**
  * 参数基类
- * Class Parameters
- * @package Payment
+ * Class AbstractParameter
+ * @package Payment\Parameters
  */
-abstract class AbstractParameter
+abstract class AbstractParameter implements ParameterInterface
 {
     /**
-     * @var PayConfiguration 支付配置信息
+     * @var string 商家的AppId
      */
-    protected $config;
+    public $appid;
+
     /**
      * @var array 请求的数据
      */
-    protected $requestData;
-    /**
-     * @var array 响应的数据
-     */
-    protected $responseData;
+    public $requestData = array();
 
-    public function __construct(PayConfiguration $config)
+    public function __construct($appid)
     {
-        $this->config = $config;
+        $this->appid = $appid;
     }
-
     /**
      * 获取变量，通过魔术方法
      * @param string $name
@@ -45,6 +39,9 @@ abstract class AbstractParameter
      */
     public function __get($name)
     {
+        if($name == 'appid'){
+            return $this->appid;
+        }
         if (isset($this->requestData[$name])) {
             return $this->requestData[$name];
         }
@@ -58,7 +55,11 @@ abstract class AbstractParameter
      */
     public function __set($name, $value)
     {
-        $this->requestData[$name] = $value;
+        if($name == 'appid'){
+            $this->appid = $value;
+        }else {
+            $this->requestData[$name] = $value;
+        }
     }
 
     public function sign()

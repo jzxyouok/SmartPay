@@ -100,3 +100,85 @@ if(!function_exists('convert_xml_to_array')) {
         return $data;
     }
 }
+
+if(!function_exists('http_build_query_params')) {
+    /**
+     * 将数组转换成kv格式的字符串
+     * @param array $params
+     * @return string
+     */
+    function http_build_query_params(array $params){
+        $buff = "";
+        foreach ($params as $k => $v)
+        {
+            if($v != "" && !is_array($v)){
+                $buff .= $k . "=" . $v . "&";
+            }
+        }
+
+        $buff = trim($buff, "&");
+        return $buff;
+    }
+}
+
+if(!function_exists('rsa_encrypt')) {
+    /**
+     * 实现 RSA 加密
+     * @param string $key
+     * @param string $data
+     * @return string|bool
+     */
+    function rsa_encrypt($key, $data){
+        $res = openssl_get_privatekey($key);
+
+        if($res === false || !openssl_sign($data, $sign, $res)){
+            return false;
+        }
+        openssl_free_key($res);
+        //base64编码
+        $sign = base64_encode($sign);
+        return $sign;
+    }
+}
+
+if(!function_exists('rsa_decrypt')) {
+    /**
+     * RSA 解密
+     * @param string $key
+     * @param string $content
+     * @return string
+     */
+    function rsa_decrypt($key, $content){
+        $res = openssl_get_privatekey($key);
+        if($res === false){
+            return false;
+        }
+        //用base64将内容还原成二进制
+        $content = base64_decode($content);
+        //把需要解密的内容，按128位拆开解密
+        $result  = '';
+        for($i = 0; $i < strlen($content)/128; $i++  ) {
+            $data = substr($content, $i * 128, 128);
+            openssl_private_decrypt($data, $decrypt, $res);
+            $result .= $decrypt;
+        }
+        openssl_free_key($res);
+        return $result;
+    }
+}
+
+if(!function_exists('rsa_verify')) {
+    /**
+     * @param string $key 公钥
+     * @param string $data 需要校验的数据
+     * @param string $sign 需要校验的密文
+     * @return bool
+     */
+    function rsa_verify($key , $data, $sign){
+        // 初始时，使用公钥key
+        $res = openssl_get_publickey($key);
+        $result = (bool)openssl_verify($data, base64_decode($sign), $res);
+        openssl_free_key($res);
+        return $result;
+    }
+}

@@ -10,6 +10,8 @@ namespace Payment\Wechat\Parameters;
 
 
 use Payment\Exceptions\PaymentException;
+use Payment\Parameters\QueryOrderParameter;
+use Payment\Support\Traits\WechatParameterTrait;
 
 /**
  * 订单查询参数
@@ -23,8 +25,10 @@ use Payment\Exceptions\PaymentException;
  * @property string $sign 签名
  * @property string $sign_type 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
  */
-class WechatQueryOrderParameter extends WechatParameter
+class WechatQueryOrderParameter extends QueryOrderParameter
 {
+    use WechatParameterTrait;
+
     protected function buildData()
     {
         if(!array_key_exists('appid',$this->requestData)){

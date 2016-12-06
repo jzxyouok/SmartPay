@@ -20,6 +20,18 @@ abstract class PayConfiguration
 {
     protected $config = array();
 
+    public function __get($name)
+    {
+        if(isset($this->config[$name])){
+            return $this->config[$name];
+        }
+        return null;
+    }
+    public function __set($name, $value)
+    {
+       $this->config[$name] = $value;
+    }
+
     /**
      * 根据指定路径或数组初始化配置
      * @param string|array $path 配置文件路径或配置数组
@@ -39,10 +51,7 @@ abstract class PayConfiguration
      */
     public function get($key)
     {
-        if (key_exists($key, $this->config)) {
-            return $this->config[$key];
-        }
-        return null;
+        return $this->$key;
     }
 
     /**

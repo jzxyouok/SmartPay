@@ -10,6 +10,8 @@ namespace Payment\Wechat\Parameters;
 
 
 use Payment\Exceptions\PaymentException;
+use Payment\Parameters\AbstractParameter;
+use Payment\Support\Traits\WechatParameterTrait;
 
 /**
  * 微信生成短链接服务
@@ -23,8 +25,10 @@ use Payment\Exceptions\PaymentException;
  * @property string $long_url 需要转换的URL，签名用原串，传输需URLencode
  *
  */
-class WechatShortUrlParameter extends WechatParameter
+class WechatShortUrlParameter extends AbstractParameter
 {
+    use WechatParameterTrait;
+
     protected function buildData()
     {
         if(!array_key_exists('appid',$this->requestData)){

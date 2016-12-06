@@ -9,6 +9,8 @@
 namespace Payment\Wechat\Parameters;
 
 use Payment\Exceptions\PaymentException;
+use Payment\Parameters\TradeParameter;
+use Payment\Support\Traits\WechatParameterTrait;
 
 /**
  * 刷卡支付提交订单参数
@@ -31,8 +33,10 @@ use Payment\Exceptions\PaymentException;
  * @property string $goods_tag 商品标记，代金券或立减优惠功能的参数
  * @property string $auth_code  扫码支付授权码，设备读取用户微信中的条码或者二维码信息
  */
-class WechatQrParameter extends WechatParameter
+class WechatTradeParameter extends TradeParameter
 {
+    use WechatParameterTrait;
+
     protected function buildData()
     {
         if(!array_key_exists('appid',$this->requestData)){

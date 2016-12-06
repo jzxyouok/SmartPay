@@ -14,6 +14,9 @@ use Payment\Configuration\PayConfiguration;
 /**
  * Class WechatConfiguration
  * @package Payment\Wechat
+ * @property string $appid
+ * @property string $mch_id
+ * @property string $key
  */
 class WechatConfiguration extends PayConfiguration
 {
@@ -49,4 +52,8 @@ class WechatConfiguration extends PayConfiguration
      * @var string 生成短链接
      */
     public $shorturl_url = 'https://api.mch.weixin.qq.com/tools/shorturl';
+    /**
+     * @var string 撤销订单
+     */
+    public $reverse_url = 'https://api.mch.weixin.qq.com/secapi/pay/reverse';
 }

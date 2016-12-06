@@ -10,6 +10,8 @@ namespace Payment\Wechat\Parameters;
 
 
 use Payment\Exceptions\PaymentException;
+use Payment\Parameters\PreOrderParameter;
+use Payment\Support\Traits\WechatParameterTrait;
 
 /**
  * 微信统一下单参数
@@ -37,8 +39,10 @@ use Payment\Exceptions\PaymentException;
  * @property string $limit_pay no_credit--指定不能使用信用卡支付
  * @property string $openid trade_type=JSAPI，此参数必传，用户在商户appid下的唯一标识。
  */
-class WechatUnifiedOrderParameter extends WechatParameter
+class WechatPreOrderParameter extends PreOrderParameter
 {
+
+    use WechatParameterTrait;
 
     protected function buildData()
     {
