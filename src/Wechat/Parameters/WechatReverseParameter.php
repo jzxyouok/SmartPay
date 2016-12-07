@@ -14,19 +14,81 @@ use Payment\Parameters\ReverseParameter;
 use Payment\Support\Traits\WechatParameterTrait;
 
 /**
- * Class WechatReverseParameter
+ * 撤销订单
+ *
+ * 支付交易返回失败或支付系统超时，调用该接口撤销交易。如果此订单用户支付失败，微信支付系统会将此订单关闭；如果用户支付成功，微信支付系统会将此订单资金退还给用户。
+ * 注意：7天以内的交易单可调用撤销，其他正常支付的单如需实现相同功能请调用申请退款API。提交支付交易后调用【查询订单API】，没有明确的支付结果再调用【撤销订单API】。
+ *
  * @package Payment\Wechat\Parameters
- * @property string $appid 微信分配的公众账号ID（企业号corpid即为此appId）
- * @property string $mch_id 微信支付分配的商户号
- * @property string $transaction_id 微信订单号
- * @property string $out_trade_no 商户系统内部的订单号,32个字符内、可包含字母
- * @property string $nonce_str 随机字符串，不长于32位。
- * @property string $sign 签名
- * @property string $sign_type 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
+ *
  */
 class WechatReverseParameter extends ReverseParameter
 {
     use WechatParameterTrait;
+
+    /**
+     * 微信的订单号，优先使用
+     * @return string
+     */
+    public function getTransactionId()
+    {
+        return $this->transaction_id;
+    }
+
+    /**
+     * 微信的订单号，优先使用
+     * @param string $transaction_id
+     * @return WechatReverseParameter
+     */
+    public function setTransactionId($transaction_id = null)
+    {
+        if($transaction_id !== null){
+            $this->transaction_id = $transaction_id;
+        }
+        return $this;
+    }
+
+    /**
+     * 商户系统内部的订单号,transaction_id、out_trade_no二选一，如果同时存在优先级：transaction_id> out_trade_no
+     * @return string
+     */
+    public function getOutTradeNo()
+    {
+        return $this->out_trade_no;
+    }
+
+    /**
+     * 商户系统内部的订单号,transaction_id、out_trade_no二选一，如果同时存在优先级：transaction_id> out_trade_no
+     *
+     * @param string $out_trade_no
+     * @return WechatReverseParameter
+     */
+    public function setOutTradeNo($out_trade_no)
+    {
+        $this->out_trade_no = $out_trade_no;
+        return time();
+    }
+
+    /**
+     * 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
+     * @return string
+     */
+    public function getSignType()
+    {
+        return $this->sign_type;
+    }
+
+    /**
+     * 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
+     * @param string $sign_type
+     * @return WechatReverseParameter
+     */
+    public function setSignType($sign_type = 'MD5')
+    {
+        $this->sign_type = $sign_type;
+        return time();
+    }
+
 
     protected function buildData()
     {

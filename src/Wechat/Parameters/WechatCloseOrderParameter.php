@@ -21,10 +21,52 @@ use Payment\Support\Traits\WechatParameterTrait;
  * @property string $out_trade_no 商户系统内部的订单号,32个字符内、可包含字母
  * @property string $nonce_str 随机字符串，不长于32位。
  * @property string $sign 签名
+ * @property string $sign_type 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
  */
 class WechatCloseOrderParameter extends CloseOrderParameter
 {
     use WechatParameterTrait;
+
+    /**
+     * 商户系统内部的订单号
+     * @return string
+     */
+    public function getOutTradeNo()
+    {
+        return $this->out_trade_no;
+    }
+
+    /**
+     * 商户系统内部的订单号
+     * @param string $out_trade_no
+     * @return WechatCloseOrderParameter
+     */
+    public function setOutTradeNo($out_trade_no)
+    {
+        $this->out_trade_no = $out_trade_no;
+        return $this;
+    }
+
+    /**
+     * 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
+     * @return string
+     */
+    public function getSignType()
+    {
+        return $this->sign_type;
+    }
+
+    /**
+     * 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
+     * @param string $sign_type
+     * @return $this
+     */
+    public function setSignType($sign_type = 'MD5')
+    {
+        $this->sign_type = $sign_type;
+        return $this;
+    }
+
 
     protected function buildData()
     {

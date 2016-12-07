@@ -9,6 +9,8 @@
 namespace Payment\Alipay;
 
 use Payment\AbstractPaymentProvider;
+use Payment\Alipay\Parameters\AlipayWapOrderParameter;
+use Payment\Parameters\AbstractParameter;
 use Payment\Parameters\AppParameter;
 use Payment\Parameters\BillParameter;
 use Payment\Parameters\CloseOrderParameter;
@@ -27,8 +29,9 @@ use Payment\Parameters\TradeParameter;
  * Class AlipayPaymentProvider
  * @package Payment\Alipay
  */
-class AlipayPaymentProvider extends AbstractPaymentProvider
+class AlipayTradePaymentProvider extends AbstractPaymentProvider
 {
+
     public function createAppSign(AppParameter $parameter)
     {
         // TODO: Implement createAppSign() method.
@@ -41,17 +44,35 @@ class AlipayPaymentProvider extends AbstractPaymentProvider
 
     public function createOrder(OrderParameter $parameter)
     {
-        // TODO: Implement createOrder() method.
+
     }
 
-    public function micropay(TradeParameter $parameters)
+    public function micropay(TradeParameter $parameter)
     {
-        // TODO: Implement micropay() method.
+        $url = $this->config->get('alipay_url');
+
+        $parameter->sign();
+
+        $data = http_build_query($parameter->getRequestData());
+
+        $header['content-type'] = 'application/x-www-form-urlencoded;charset=' . $this->config->get('charset','utf-8');
+
+        $result = $this->post($data,$url,30,null,$header);
+
+        return $result;
     }
 
-    public function unifiedOrder(PreOrderParameter $parameters)
+    public function unifiedOrder(PreOrderParameter $parameter)
     {
-        // TODO: Implement unifiedOrder() method.
+        $url = $this->config->get('alipay_url');
+
+        $data = http_build_query($parameter->getRequestData());
+
+        $header['content-type'] = 'application/x-www-form-urlencoded;charset=' . $this->config->get('charset','utf-8');
+
+        $result = $this->post($data,$url,30,null,$header);
+
+        return $result;
     }
 
     public function queryOrder(QueryOrderParameter $parameters)
@@ -89,4 +110,15 @@ class AlipayPaymentProvider extends AbstractPaymentProvider
         // TODO: Implement reverse() method.
     }
 
+    public function handle(AbstractParameter $parameter)
+    {
+        if($parameter instanceof AlipayWapOrderParameter){
+            $parameter->sign();
+
+            print_r($parameter->getRequestData());
+            exit;
+            return AlipayWapOrderParameter::ALIPAY_GATEWAY . '?' . http_build_query($parameter->getRequestData());
+        }
+        return null;
+    }
 }

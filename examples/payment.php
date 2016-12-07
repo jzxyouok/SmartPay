@@ -24,9 +24,9 @@ $params->product_id = 'a88888';
 //echo $provider->createQrCode($params);
 
 $params = new WechatOrderParameter($config->appid,$config->mch_id,$config->key);
-$params->body ='abcd';
-$params->notify_url = $config->notify_url;
-$params->out_trade_no = '1151026628743';
+$params->setBody('测试订单');
+$params->setNotifyUrl($config->notify_url);
+$params->setOutTradeNo('1151026628743');
 $params->total_fee = 1;
 $params->trade_type = 'NATIVE';
 $params->openid = 'ouAi1jjpoxo2Uy1ZIxUSXW-WLoBI';
@@ -39,6 +39,7 @@ $result = $provider->createOrder($params);
 $params = new WechatCloseOrderParameter($config->appid,$config->mch_id,$config->key);
 
 $params->out_trade_no = '1151026628743';
+
 
 
 $result = $provider->closeOrder($params);

@@ -15,19 +15,58 @@ use Payment\Support\Traits\WechatParameterTrait;
 
 /**
  * 微信生成短链接服务
- * Class WechatShortUrlParameter
+ *
+ * 该接口主要用于扫码原生支付模式一中的二维码链接转成短链接(weixin://wxpay/s/XXXXXX)，减小二维码数据量，提升扫描速度和精确度。
+ *
  * @package Payment\Wechat\Parameters
- * @property string $appid 微信分配的公众账号ID（企业号corpid即为此appId）
- * @property string $mch_id 微信支付分配的商户号
- * @property string $nonce_str 随机字符串，不长于32位。
- * @property string $sign 签名
- * @property string $sign_type 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
- * @property string $long_url 需要转换的URL，签名用原串，传输需URLencode
  *
  */
 class WechatShortUrlParameter extends AbstractParameter
 {
     use WechatParameterTrait;
+
+    /**
+     * 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
+     * @return string
+     */
+    public function getSignType()
+    {
+        return $this->sign_type;
+    }
+
+    /**
+     * 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
+     * @param string $sign_type
+     * @return  WechatShortUrlParameter
+     */
+    public function setSignType($sign_type = 'MD5')
+    {
+        $this->sign_type = $sign_type;
+        return $this;
+
+    }
+
+    /**
+     * 需要转换的URL，签名用原串，传输需URLencode
+     * @return string
+     */
+    public function getLongUrl()
+    {
+        return $this->long_url;
+    }
+
+    /**
+     * 需要转换的URL，签名用原串，传输需URLencode
+     * @param string $long_url
+     * @return WechatShortUrlParameter
+     */
+    public function setLongUrl($long_url)
+    {
+        $this->long_url = $long_url;
+        return $this;
+    }
+
+
 
     protected function buildData()
     {

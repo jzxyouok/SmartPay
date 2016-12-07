@@ -20,7 +20,7 @@ use Payment\Support\Traits\WechatParameterTrait;
  * @property string $appid 微信分配的公众账号ID（企业号corpid即为此appId）
  * @property string $mch_id 微信支付分配的商户号
  * @property string $transaction_id 微信的订单号，优先使用
- * @property string $ out_trade_no 商户系统内部的订单号，当没提供transaction_id时需要传这个。
+ * @property string $out_trade_no 商户系统内部的订单号，当没提供transaction_id时需要传这个。
  * @property string $nonce_str 随机字符串，不长于32位。
  * @property string $sign 签名
  * @property string $sign_type 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
@@ -28,6 +28,65 @@ use Payment\Support\Traits\WechatParameterTrait;
 class WechatQueryOrderParameter extends QueryOrderParameter
 {
     use WechatParameterTrait;
+
+    /**
+     * 微信的订单号，建议优先使用
+     * @return string
+     */
+    public function getTransactionId()
+    {
+        return $this->transaction_id;
+    }
+
+    /**
+     * 微信的订单号，建议优先使用
+     * @param string $transaction_id
+     * @return WechatQueryOrderParameter
+     */
+    public function setTransactionId($transaction_id)
+    {
+        $this->transaction_id = $transaction_id;
+        return $this;
+    }
+
+    /**
+     * 商户系统内部的订单号，请确保在同一商户号下唯一。
+     * @return string
+     */
+    public function getOutTradeNo()
+    {
+        return $this->out_trade_no;
+    }
+
+    /**
+     * 商户系统内部的订单号，请确保在同一商户号下唯一。
+     * @param string $out_trade_no
+     * @return WechatQueryOrderParameter
+     */
+    public function setOutTradeNo($out_trade_no)
+    {
+        $this->out_trade_no = $out_trade_no;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSignType()
+    {
+        return $this->sign_type;
+    }
+
+    /**
+     * @param string $sign_type
+     * @return WechatQueryOrderParameter
+     */
+    public function setSignType($sign_type = 'MD5')
+    {
+        $this->sign_type = $sign_type;
+        return $this;
+    }
+
 
     protected function buildData()
     {

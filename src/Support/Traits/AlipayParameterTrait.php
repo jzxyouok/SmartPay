@@ -2,27 +2,48 @@
 
 namespace Payment\Support\Traits;
 
+use Payment\Alipay\Parameters\AlipayParameter;
+
+/**
+ * 支付宝支付的公共代码
+ * Class AlipayParameterTrait
+ * @package Payment\Support\Traits
+ */
 trait AlipayParameterTrait
 {
+    protected $_data = array();
+    /**
+     * @var AlipayParameter 公共参数
+     */
+    protected $parameter ;
 
-    public $appid;
+    public function __construct(AlipayParameter $parameter)
+    {
+        $parameter->setMethod($this->method);
+        $this->parameter = $parameter;
+    }
+
 
     protected function createSign()
     {
-        $sign = '';
-        switch ($this->sign_type) {
-            case 'MD5' :
-                $this->signStr .= $this->key;// 此处不需要通过 & 符号链接
-                $sign = md5($this->signStr);
-                break;
-            case 'RSA' :
-                $rsa_private_key = @file_get_contents($this->rsa_private_path);
-                $rsa = new RsaEncrypt($rsa_private_key);
-                $sign = $rsa->encrypt($this->signStr);
-                break;
-            default :
-                $sign = '';
+        ksort($this->requestData);
+
+        $string = http_build_query_params($this->getRequestData());
+
+        //print_r($string);exit;
+
+        if($this->parameter->getSignType() == 'RSA') {
+            $rsa_private_key = @file_get_contents($this->parameter->getRsaPrivatePath());
+
+            $string = rsa_encrypt($rsa_private_key, $string);
+        }elseif ($this->parameter->getSignType() == 'MD5'){
+            $string = md5($string. $this->parameter->getKey());
         }
-        return $sign;
+
+        if($string === false){
+            throw new \Payment\Exceptions\PaymentException('RSA 加密时出错');
+        }
+
+       return $string;
     }
 }

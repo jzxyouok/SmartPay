@@ -15,20 +15,54 @@ use Payment\Support\Traits\WechatParameterTrait;
 
 /**
  * 生成用户扫码的二维码参数
- * Class WechatQrCodeParameter
+ *
+ * 微信扫码支付模式一的二维码生成
+ *
  * @package Payment\Wechat\Parameters
- * @property string $appid 微信分配的公众账号ID（企业号corpid即为此appId）
- * @property string $mch_id 微信支付分配的商户号
- * @property string $nonce_str 随机字符串，不长于32位。
- * @property string $sign 签名
- * @property string $time_stamp 系统当前时间
- * @property string $product_id 商户定义的商品id 或者订单号
  *
  */
 class WechatQrCodeParameter extends QrCodeParameter
 {
     use WechatParameterTrait;
 
+    /**
+     * 系统当前时间，定义规则详见时间戳
+     * @return string
+     */
+    public function getTimeStamp()
+    {
+        return $this->time_stamp;
+    }
+
+    /**
+     * 系统当前时间，定义规则详见时间戳
+     * @param string $time_stamp
+     */
+    public function setTimeStamp($time_stamp = null)
+    {
+        if($time_stamp == null){
+            $time_stamp = time();
+        }
+        $this->time_stamp = $time_stamp;
+    }
+
+    /**
+     * 商户定义的商品id 或者订单号
+     * @return string
+     */
+    public function getProductId()
+    {
+        return $this->product_id;
+    }
+
+    /**
+     * 商户定义的商品id 或者订单号
+     * @param string $product_id
+     */
+    public function setProductId($product_id)
+    {
+        $this->product_id = $product_id;
+    }
 
     protected function buildData()
     {

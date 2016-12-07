@@ -47,11 +47,20 @@ abstract class PayConfiguration
     /**
      * 获取指定键的值
      * @param string $key 键名
+     * @param mixed $default  默认值
      * @return mixed|null
      */
-    public function get($key)
+    public function get($key,$default = null)
     {
-        return $this->$key;
+        if(isset($this->config[$key])){
+            return $this->config[$key];
+        }
+        return $default;
+    }
+
+    public function __isset($name)
+    {
+        return isset($this->config[$name]);
     }
 
     /**

@@ -10,6 +10,8 @@ namespace Payment\Wechat\Parameters;
 
 
 use Payment\Exceptions\PaymentException;
+use Payment\Parameters\AbstractParameter;
+use Payment\Support\Traits\WechatParameterTrait;
 
 /**
  * 微信交易保障接口
@@ -24,8 +26,10 @@ use Payment\Exceptions\PaymentException;
  * @property string $interface_url 刷卡支付终端上报统一填：https://api.mch.weixin.qq.com/pay/batchreport/micropay/total
  * @property string $user_ip 发起接口调用时的机器IP
  */
-class WechartReportParameter extends WechatParameter
+class WechartReportParameter extends AbstractParameter
 {
+    use WechatParameterTrait;
+
     protected function buildData()
     {
         if(!array_key_exists('appid',$this->requestData)){

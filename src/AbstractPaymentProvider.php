@@ -129,10 +129,11 @@ abstract class AbstractPaymentProvider
      * @param string $url 请求路径
      * @param int $second 超时时间
      * @param null|array $sslcert 请求的证书数组
+     * @param array|null $headers 请求头
      * @return mixed
      * @throws PaymentException
      */
-    protected function post($data, $url, $second = 30,$sslcert = null)
+    protected function post($data, $url, $second = 30,$sslcert = null, $headers = null)
     {
         if(empty($url)){
             throw new \InvalidArgumentException('缺少参数 $url');
@@ -156,6 +157,16 @@ abstract class AbstractPaymentProvider
             curl_setopt($ch,CURLOPT_SSLCERT, $sslcert['sslcert_path']);
             curl_setopt($ch,CURLOPT_SSLKEYTYPE,$sslcert['sslkey_type']);
             curl_setopt($ch,CURLOPT_SSLKEY, $sslcert['sslkey_path']);
+        }
+
+        if(is_array($headers) && empty($headers) === false){
+            $header = array();
+            foreach ($headers as $key=>$value){
+                $header[] = $key.':'.$value;
+            }
+            if(count($header) > 0){
+                curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+            }
         }
         //post提交方式
         curl_setopt($ch, CURLOPT_POST, TRUE);

@@ -129,9 +129,11 @@ if(!function_exists('rsa_encrypt')) {
      * @return string|bool
      */
     function rsa_encrypt($key, $data){
+
         $res = openssl_get_privatekey($key);
 
         if($res === false || !openssl_sign($data, $sign, $res)){
+
             return false;
         }
         openssl_free_key($res);
