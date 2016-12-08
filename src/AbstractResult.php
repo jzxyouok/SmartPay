@@ -1,5 +1,7 @@
 <?php
 
+namespace Payment;
+
 /**
  * 支付结果响应对象
  * User: lifeilin

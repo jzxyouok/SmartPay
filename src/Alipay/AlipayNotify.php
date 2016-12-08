@@ -15,12 +15,16 @@ class AlipayNotify extends AbstractNotify
 {
     protected function getRequestData()
     {
-        // TODO: Implement getRequestData() method.
+        $data = empty($_POST) ? $_GET : $_POST;
+        if (empty($data) || ! is_array($data)) {
+            return false;
+        }
+        return $data;
     }
 
     protected function verifySign()
     {
-        // TODO: Implement verifySign() method.
+
     }
 
     protected function reply($isSuccess, $message)

@@ -10,6 +10,7 @@ namespace Payment\Alipay;
 
 use Payment\AbstractPaymentProvider;
 use Payment\Alipay\Parameters\AlipayWapOrderParameter;
+use Payment\Alipay\Parameters\AlipayWapRefundParameter;
 use Payment\Parameters\AbstractParameter;
 use Payment\Parameters\AppParameter;
 use Payment\Parameters\BillParameter;
@@ -85,9 +86,9 @@ class AlipayTradePaymentProvider extends AbstractPaymentProvider
         // TODO: Implement closeOrder() method.
     }
 
-    public function refund(RefundParameter $parameters)
+    public function refund(RefundParameter $parameter)
     {
-        // TODO: Implement refund() method.
+        return $this->handle($parameter);
     }
 
     public function refundQuery(RefundQueryParameter $parameters)
@@ -110,14 +111,21 @@ class AlipayTradePaymentProvider extends AbstractPaymentProvider
         // TODO: Implement reverse() method.
     }
 
+
     public function handle(AbstractParameter $parameter)
     {
         if($parameter instanceof AlipayWapOrderParameter){
             $parameter->sign();
 
-            print_r($parameter->getRequestData());
-            exit;
-            return AlipayWapOrderParameter::ALIPAY_GATEWAY . '?' . http_build_query($parameter->getRequestData());
+            $params = http_build_query($parameter->getRequestData()) . '&sign_type=' . $parameter->getSignType();
+
+            return AlipayConfiguration::ALIPAY_GATEWAY . $params;
+        }elseif ($parameter instanceof AlipayWapRefundParameter){
+            $parameter->sign();
+
+            $params = http_build_query($parameter->getRequestData()) . '&sign_type=' . $parameter->getSignType();
+
+            return AlipayConfiguration::ALIPAY_GATEWAY . $params;
         }
         return null;
     }

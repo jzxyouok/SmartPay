@@ -18,5 +18,5 @@ use Payment\Configuration\PayConfiguration;
  */
 class AlipayConfiguration extends PayConfiguration
 {
-
+    const ALIPAY_GATEWAY = 'https://mapi.alipay.com/gateway.do?';
 }

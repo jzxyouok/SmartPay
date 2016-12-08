@@ -11,42 +11,24 @@ namespace Payment\Alipay\Parameters;
 
 use Payment\Exceptions\PaymentException;
 use Payment\Parameters\OrderParameter;
-use Payment\Support\Traits\AlipayParameterTrait;
+use Payment\Support\Traits\AlipayWapParameterTrait;
 
 /**
- * 手机网站支付接口参数
+ * 手机网站支付接口参数，适用于WAP、Android、IOS等网页支付
  *
  * 要使用手机网站支付接口的权限，需要先签约手机网站支付产品。
  * 申请地址：@link https://b.alipay.com/order/productDetail.htm?productId=2015110218008816
+ * 接口文档： @link https://doc.open.alipay.com/docs/doc.htm?spm=a219a.7386797.0.0.rK8ZWl&treeId=60&articleId=104790&docType=1
  *
  * @package Payment\Alipay\Parameters
- * @property string $out_trade_no
- * @property string $subject
- * @property float $total_fee
- * @property string $seller_id
- * @property string $payment_type
- * @property string $show_url
- * @property string $body
- * @property string $it_b_pay
- * @property string $extern_token
- * @property float $otherfee
- * @property string $airticket
- * @property string $rn_check
- * @property string $buyer_cert_no
- * @property string $buyer_real_name
- * @property string $scene
- * @property string $hb_fq_param
- * @property string $goods_type
- * @property string $app_pay
- * @property string $promo_params
- * @property string $enable_paymethod
+ *
  */
 class AlipayWapOrderParameter extends OrderParameter
 {
-    const ALIPAY_GATEWAY = 'https://mapi.alipay.com/gateway.do';
+    use AlipayWapParameterTrait;
 
     protected $rsa_private_path = '';
-    protected $service = 'alipay.wap.create.direct.pay.by.user';
+
     protected $parameters = array(
         'service' => 'alipay.wap.create.direct.pay.by.user',
         '_input_charset'    => 'UTF-8',
@@ -63,6 +45,9 @@ class AlipayWapOrderParameter extends OrderParameter
         $this->parameters['partner'] = $partner;
         $this->parameters['payment_type'] = '1';
         $this->parameters['goods_type'] = '1';
+        $this->setItBPay('1d');
+
+        parent::__construct($partner);
     }
 
 
@@ -521,143 +506,10 @@ class AlipayWapOrderParameter extends OrderParameter
         return $this;
     }
 
-
     /**
-     * 商户网站使用的编码格式，仅支持UTF-8。
-     * @param $charset
-     * @return $this
+     * 检查参数的完整性
+     * @throws PaymentException
      */
-    public function setCharset($charset)
-    {
-        $this->parameters['_input_charset'] = strtoupper($charset);
-        return $this;
-    }
-
-    /**
-     * 商户网站使用的编码格式，仅支持UTF-8。
-     * @return mixed
-     */
-    public function getCharset()
-    {
-        return $this->parameters['_input_charset'];
-    }
-
-    /**
-     * DSA、RSA、MD5三个值可选，必须大写。
-     * @param $sign_type
-     * @return $this
-     */
-    public function setSignType($sign_type)
-    {
-        $this->parameters['sign_type'] = strtoupper($sign_type);
-        return $this;
-    }
-
-    /**
-     * DSA、RSA、MD5三个值可选，必须大写。
-     * @return mixed
-     */
-    public function getSignType()
-    {
-        return $this->parameters['sign_type'];
-    }
-
-    /**
-     * 支付宝服务器主动通知商户网站里指定的页面http路径。
-     * @param $notify_url
-     * @return $this
-     */
-    public function setNotifyUrl($notify_url)
-    {
-        $this->parameters['notify_url'] = $notify_url;
-        return $this;
-    }
-
-    /**
-     * 支付宝服务器主动通知商户网站里指定的页面http路径。
-     * @return mixed
-     */
-    public function getNotifyUrl()
-    {
-        return $this->parameters['notify_url'] ;
-    }
-
-    /**
-     * 支付宝处理完请求后，当前页面自动跳转到商户网站里指定页面的http路径。
-     * @param $return_url
-     * @return $this
-     */
-    public function setReturnUrl($return_url)
-    {
-        $this->parameters['return_url'] = $return_url;
-        return $this;
-    }
-
-    /**
-     * 支付宝处理完请求后，当前页面自动跳转到商户网站里指定页面的http路径。
-     * @return mixed
-     */
-    public function getReturnUrl()
-    {
-        return  $this->parameters['return_url'];
-    }
-
-    public function setKey($key)
-    {
-        $this->parameters['key'] = $key;
-        return $this;
-    }
-    public function getKey()
-    {
-        return  $this->parameters['key'];
-    }
-
-    public function setRsaPrivatePath($rsa_private_path){
-        $this->rsa_private_path = $rsa_private_path;
-        return $this;
-    }
-    public function getRsaPrivatePath()
-    {
-        return $this->rsa_private_path;
-    }
-
-    protected function buildData()
-    {
-        $params = array();
-
-        foreach ($this->parameters as $key=>$value){
-            if($key == 'sign' || $key == 'sign_type' || $value == '' || $value == null){
-                continue;
-            }
-            $params[$key] = $value;
-        }
-
-        $this->requestData = $params;
-
-    }
-
-    protected function createSign()
-    {
-        ksort($this->requestData);
-        reset($this->requestData);
-
-        $signString = http_build_query_params($this->requestData);
-
-        $sign = '';
-
-        if(strcasecmp($this->getSignType(),'MD5') === 0){
-            $signString = $signString . $this->getKey();
-            $sign = md5($signString);
-        }elseif (strcasecmp($this->getSignType(),'RSA') === 0){
-            if(!file_exists($this->getRsaPrivatePath())){
-                throw new PaymentException('RSA 加密的私钥文件不存在');
-            }
-            $rsa_private_key = @file_get_contents($this->getRsaPrivatePath());
-            $sign = rsa_encrypt($rsa_private_key,$signString);
-        }
-        return $sign;
-    }
-
     protected function checkDataParams()
     {
         if(!isset($this->parameters['partner']) || $this->parameters['partner'] === null){
