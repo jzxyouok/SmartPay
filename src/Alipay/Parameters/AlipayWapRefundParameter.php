@@ -17,12 +17,8 @@ use Payment\Support\Traits\AlipayWapParameterTrait;
  *
  * Class AlipayWapRefundParameter
  * @package Payment\Alipay\Parameters
- * @property string $seller_email
- * @property string $seller_user_id
- * @property string $refund_date
- * @property string $batch_no
- * @property int $batch_num
- * @property string $detail_data
+ * @link https://doc.open.alipay.com/docs/doc.htm?spm=a219a.7629140.0.0.POEEBV&treeId=60&articleId=104744&docType=1
+ *
  */
 class AlipayWapRefundParameter extends RefundParameter
 {

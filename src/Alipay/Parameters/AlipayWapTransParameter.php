@@ -37,8 +37,9 @@ class AlipayWapTransParameter extends OrderParameter
 
     protected $parameters = array(
         'service' => 'batch_trans_notify',
+        'partner'          => null,
         '_input_charset'    => 'UTF-8',
-        'sign_type'         => 'MD5',
+        'sign_type'         => 'RSA',
         'account_name'      => null,
         'detail_data'       => null,
         'batch_no'          => null,
@@ -54,7 +55,7 @@ class AlipayWapTransParameter extends OrderParameter
     {
         parent::__construct($partner);
 
-
+        $this->parameters['partner'] = $partner;
     }
 
     protected function buildData()
@@ -119,9 +120,7 @@ class AlipayWapTransParameter extends OrderParameter
         if(strlen($this->parameters['batch_no']) > 32 || strlen($this->parameters['batch_no']) < 11){
             throw new PaymentException('提交被扫支付API接口中，参数 batch_no 必须在 11-32字符之间');
         }
-        if($this->parameters['batch_num'] < 1 || $this->parameters['batch_num']>  1000){
-            throw new PaymentException('提交被扫支付API接口中，参数 batch_num 必须在大于 1 小于 1000');
-        }
+
         if(bccomp($this->parameters['batch_fee'],'0.01',2) === -1){
             throw new PaymentException("付款文件中的总金额，必须大于0.01");
         }

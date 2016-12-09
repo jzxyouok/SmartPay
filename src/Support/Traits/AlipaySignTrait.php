@@ -8,6 +8,8 @@
 
 namespace Payment\Support\Traits;
 
+use Payment\Exceptions\PaymentException;
+
 trait AlipaySignTrait
 {
     /**

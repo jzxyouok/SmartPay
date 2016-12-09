@@ -11,6 +11,7 @@ namespace Payment\Alipay;
 use Payment\AbstractPaymentProvider;
 use Payment\Alipay\Parameters\AlipayWapOrderParameter;
 use Payment\Alipay\Parameters\AlipayWapRefundParameter;
+use Payment\Alipay\Parameters\AlipayWapTransParameter;
 use Payment\Parameters\AbstractParameter;
 use Payment\Parameters\AppParameter;
 use Payment\Parameters\BillParameter;
@@ -114,13 +115,24 @@ class AlipayTradePaymentProvider extends AbstractPaymentProvider
 
     public function handle(AbstractParameter $parameter)
     {
+        //支付宝手机网站即时到账
         if($parameter instanceof AlipayWapOrderParameter){
             $parameter->sign();
 
             $params = http_build_query($parameter->getRequestData()) . '&sign_type=' . $parameter->getSignType();
 
             return AlipayConfiguration::ALIPAY_GATEWAY . $params;
-        }elseif ($parameter instanceof AlipayWapRefundParameter){
+        }
+        //即时到账有密退款接口
+        if ($parameter instanceof AlipayWapRefundParameter){
+            $parameter->sign();
+
+            $params = http_build_query($parameter->getRequestData()) . '&sign_type=' . $parameter->getSignType();
+
+            return AlipayConfiguration::ALIPAY_GATEWAY . $params;
+        }
+        //批量付款到支付宝账户有密接口
+        if($parameter instanceof AlipayWapTransParameter){
             $parameter->sign();
 
             $params = http_build_query($parameter->getRequestData()) . '&sign_type=' . $parameter->getSignType();

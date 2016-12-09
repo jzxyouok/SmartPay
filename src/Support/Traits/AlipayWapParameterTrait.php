@@ -7,10 +7,33 @@
  */
 namespace Payment\Support\Traits;
 
+use Payment\Exceptions\PaymentException;
+
 trait AlipayWapParameterTrait
 {
     use AlipaySignTrait;
     protected $rsa_private_path = '';
+
+    public function initialize($param)
+    {
+        if(is_array($param)){
+            isset($param['charset']) and $this->setCharset($param['_input_charset']);
+            isset($param['sign_type']) and $this->setSignType($param['sign_type']);
+            isset($param['notify_url']) and $this->setNotifyUrl($param['notify_url']);
+            isset($param['return_url']) and $this->setReturnUrl($param['return_url']);
+            isset($param['key']) and $this->setKey($param['key']);
+            isset($param['rsa_private_path']) and $this->setRsaPrivatePath($param['rsa_private_path']);
+        }elseif (is_object($param)){
+
+            isset($param->charset) and $this->setCharset($param->charset);
+            isset($param->sign_type) and $this->setSignType($param->sign_type);
+            isset($param->notify_url) and $this->setNotifyUrl($param->notify_url);
+            isset($param->return_url) and $this->setReturnUrl($param->return_url);
+            isset($param->key) and $this->setKey($param->key);
+            isset($param->rsa_private_path) and $this->setRsaPrivatePath($param->rsa_private_path);
+        }
+
+    }
 
     /**
      * 商户网站使用的编码格式，仅支持UTF-8。
@@ -106,6 +129,7 @@ trait AlipayWapParameterTrait
         $this->rsa_private_path = $rsa_private_path;
         return $this;
     }
+
     public function getRsaPrivatePath()
     {
         return $this->rsa_private_path;
