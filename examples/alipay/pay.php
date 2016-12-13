@@ -7,7 +7,7 @@
  */
 
 use Payment\Alipay\AlipayConfiguration;
-use Payment\Alipay\AlipayTradePaymentProvider;
+use Payment\Alipay\AlipayPaymentClient;
 use Payment\Alipay\Parameters\AlipayParameter;
 use Payment\Alipay\Parameters\AlipayTradeParameter;
 
@@ -26,7 +26,7 @@ $params->setScene('aaa');
 $params->setAuthCode('28763443825664394');
 $params->setSubject('aaa');
 
-$provider = new AlipayTradePaymentProvider($config);
+$provider = new AlipayPaymentClient($config);
 
 
 $result = $provider->micropay($params);

@@ -9,7 +9,7 @@
 require_once __DIR__ . '/../../autoload.php';
 
 use Payment\Alipay\AlipayConfiguration;
-use Payment\Alipay\AlipayTradePaymentProvider;
+use Payment\Alipay\AlipayPaymentClient;
 use Payment\Alipay\Parameters\AlipayWapOrderParameter;
 
 $config = new AlipayConfiguration();
@@ -28,7 +28,7 @@ $params->setPaymentType('1');
 $params->setShowUrl('https://www.baiyangwang.com');
 $params->setSignType('RSA');
 
-$provider = new AlipayTradePaymentProvider($config);
+$provider = new AlipayPaymentClient($config);
 
 $url = $provider->handle($params);
 

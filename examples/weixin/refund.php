@@ -4,14 +4,14 @@ require_once __DIR__ . '/../autoload.php';
 
 use Payment\Wechat\Parameters\WechatRefundParameter;
 use Payment\Wechat\WechatConfiguration;
-use Payment\Wechat\WechatPaymentProvider;
+use Payment\Wechat\WechatPaymentClient;
 
 
 //初始化配置
 $config = new WechatConfiguration();
 $config->initialize(__DIR__ . '/wxconfig.php');
 
-$provider = new WechatPaymentProvider($config);
+$provider = new WechatPaymentClient($config);
 
 $params = new WechatRefundParameter($config->appid,$config->mch_id,$config->key);
 $params->out_trade_no = '1151026628743';

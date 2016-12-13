@@ -9,7 +9,7 @@ date_default_timezone_set('Asia/Shanghai');
 require_once __DIR__ . '/../../autoload.php';
 
 use Payment\Alipay\AlipayConfiguration;
-use Payment\Alipay\AlipayTradePaymentProvider;
+use Payment\Alipay\AlipayPaymentClient;
 use Payment\Alipay\Parameters\AlipayWapOrderParameter;
 use Payment\Alipay\Parameters\AlipayWapRefundParameter;
 
@@ -26,7 +26,7 @@ $params->setRsaPrivatePath($config->rsa_private_path);
 
 $params->setDetailData(['trade_no' => '4007572001201607098672633287','total_fee' => 0.01,'reason' => '无理由退款']);
 
-$provider = new AlipayTradePaymentProvider($config);
+$provider = new AlipayPaymentClient($config);
 
 $result = $provider->refund($params);
 

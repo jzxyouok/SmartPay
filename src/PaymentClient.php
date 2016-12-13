@@ -10,18 +10,7 @@ namespace Payment;
 
 use Payment\Configuration\PayConfiguration;
 use Payment\Exceptions\PaymentException;
-use Payment\Parameters\AppParameter;
-use Payment\Parameters\QrCodeParameter;
-use Payment\Parameters\OrderParameter;
-use Payment\Parameters\ReportParameter;
-use Payment\Parameters\ReverseParameter;
-use Payment\Parameters\TradeParameter;
-use Payment\Parameters\PreOrderParameter;
-use Payment\Parameters\QueryOrderParameter;
-use Payment\Parameters\CloseOrderParameter;
-use Payment\Parameters\RefundParameter;
-use Payment\Parameters\RefundQueryParameter;
-use Payment\Parameters\BillParameter;
+use Payment\Parameters\AbstractParameter;
 
 
 /**
@@ -29,7 +18,7 @@ use Payment\Parameters\BillParameter;
  * Class PaymentBase
  * @package Payment
  */
-abstract class AbstractPaymentProvider
+abstract class PaymentClient
 {
     /**
      * @var PayConfiguration 支付配置对象
@@ -42,87 +31,9 @@ abstract class AbstractPaymentProvider
         $this->config = $config;
     }
 
-    /**
-     * 创建APP支付需要的签名信息
-     * @param AppParameter $parameter
-     * @return mixed
-     */
-    abstract public function createAppSign(AppParameter $parameter);
 
-    /**
-     * 生成扫码支付的二维码内容
-     * @param QrCodeParameter $parameter
-     * @return mixed
-     */
-    abstract public function createQrCode(QrCodeParameter $parameter);
+    abstract public function handle(AbstractParameter $parameter);
 
-    /**
-     * 创建支付订单
-     * @param OrderParameter $parameter
-     * @return mixed
-     */
-    abstract public function createOrder(OrderParameter $parameter);
-    /**
-     * 商户扫码支付
-     * @param TradeParameter $parameters
-     * @return mixed
-     */
-    abstract public function micropay(TradeParameter $parameters);
-    /**
-     * 预生成订单，适用于用户扫码
-     * @param PreOrderParameter $parameters
-     * @return mixed
-     */
-    abstract public function unifiedOrder(PreOrderParameter $parameters);
-
-    /**
-     * 订单查询
-     * @param QueryOrderParameter $parameters
-     * @return mixed
-     */
-    abstract public function queryOrder(QueryOrderParameter $parameters);
-
-    /**
-     * 关闭订单
-     * @param CloseOrderParameter $parameters
-     * @return mixed
-     */
-    abstract public function closeOrder (CloseOrderParameter $parameters);
-
-    /**
-     * 申请退款
-     * @param RefundParameter $parameters
-     * @return mixed
-     */
-    abstract public function refund(RefundParameter $parameters);
-
-    /**
-     * 查询退款
-     * @param RefundQueryParameter $parameters
-     * @return mixed
-     */
-    abstract public function refundQuery(RefundQueryParameter $parameters);
-
-    /**
-     * 账单查询
-     * @param BillParameter $parameters
-     * @return mixed
-     */
-    abstract public function queryBill(BillParameter $parameters);
-
-    /**
-     * 交易保障接口,程序根据配置自动上报
-     * @param ReportParameter $parameters
-     * @return mixed
-     */
-    abstract protected function report(ReportParameter $parameters);
-
-    /**
-     * 撤销支付订单
-     * @param ReverseParameter $parameter
-     * @return mixed
-     */
-    abstract public function reverse(ReverseParameter $parameter);
     /**
      * 发起 POST 请求
      * @param array|string $data 请求的数据

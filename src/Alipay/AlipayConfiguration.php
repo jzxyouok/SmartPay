@@ -19,4 +19,13 @@ use Payment\Configuration\PayConfiguration;
 class AlipayConfiguration extends PayConfiguration
 {
     const ALIPAY_GATEWAY = 'https://mapi.alipay.com/gateway.do?';
+
+    /**
+     * 商家账号
+     * @return null|string
+     */
+    public function getPartner()
+    {
+        return isset($this->config['partner'])? $this->config['partner'] : null;
+    }
 }

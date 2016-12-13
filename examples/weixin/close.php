@@ -10,7 +10,7 @@ require_once __DIR__ . '/../autoload.php';
 
 use Payment\Wechat\Parameters\WechatCloseOrderParameter;
 use Payment\Wechat\WechatConfiguration;
-use Payment\Wechat\WechatPaymentProvider;
+use Payment\Wechat\WechatPaymentClient;
 
 //初始化配置信息
 $config = new WechatConfiguration();
@@ -21,5 +21,5 @@ $params = new WechatCloseOrderParameter($config->appid,$config->mch_id,$config->
 $params->setOutTradeNo('');
 
 //初始化服务提供对象
-$provider = new WechatPaymentProvider($config);
+$provider = new WechatPaymentClient($config);
 $provider->closeOrder($params);

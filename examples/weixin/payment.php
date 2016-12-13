@@ -7,14 +7,14 @@ use Payment\Wechat\Parameters\WechatCloseOrderParameter;
 use Payment\Wechat\Parameters\WechatOrderParameter;
 use Payment\Wechat\Parameters\WechatQrCodeParameter;
 use Payment\Wechat\WechatConfiguration;
-use Payment\Wechat\WechatPaymentProvider;
+use Payment\Wechat\WechatPaymentClient;
 
 
 $config = new WechatConfiguration();
 $config->initialize(__DIR__ . '/wxconfig.php');
 
 
-$provider = new WechatPaymentProvider($config);
+$provider = new WechatPaymentClient($config);
 
 
 $params = new WechatQrCodeParameter($config->appid,$config->mch_id,$config->key);

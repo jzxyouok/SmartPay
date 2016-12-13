@@ -62,16 +62,59 @@ class AlipayDirectParameter extends OrderParameter
         'goods_type'        => '1'
     );
 
-    public function __construct($appid)
+    public function __construct($partner)
     {
-        parent::__construct($appid);
+        parent::__construct($partner);
+        $this->parameters['partner'] = $partner;
+    }
 
+    protected function buildData()
+    {
+        $params = array();
+        foreach ($this->parameters as $key=>$value) {
+            if ($key == 'sign' || $key == 'sign_type' || $value == '' || $value == null) {
+                continue;
+            }
+            if(is_array($value) && $key == 'enable_paymethod' && empty($value) === false){
+                $params['enable_paymethod'] = implode('^',$value);
+                continue;
+            }
+            if(is_array($value) && $key == 'hb_fq_param' && empty($value) === false){
+                $params['hb_fq_param'] = 'hb_fq_seller_percent^'.$value['hb_fq_seller_percent'].'|hb_fq_num^'.$value['hb_fq_num'];
+                continue;
+            }
+            $params[$key] = $value;
+        }
+        $this->requestData = $params;
     }
 
     protected function checkDataParams()
     {
-        // TODO: Implement checkDataParams() method.
+        if($this->parameters['out_trade_no'] === null || strlen($this->parameters['out_trade_no'] ) > 64){
+            throw new PaymentException('out_trade_no 不能为空且必须小于64个字符');
+        }
+        if($this->parameters['subject'] === null || mb_strlen($this->parameters['subject'] ) > 256){
+            throw new PaymentException('subject 不能为空且必须小于256个字符');
+        }
+        if($this->parameters['seller_id'] === null && $this->parameters['seller_email'] === null && $this->parameters['seller_account_name'] === null ){
+            throw new PaymentException('seller_id seller_email seller_account_name 三个参数至少必须传递一个');
+        }
+
+        if($this->parameters['body'] !== null && mb_strlen($this->parameters['body']) > 1000){
+            throw new PaymentException('body 必须小于 1000 个字符');
+        }
+        if($this->parameters['show_url'] !== null && mb_strlen($this->parameters['show_url']) > 400){
+            throw new PaymentException('show_url 必须小于 400 个字符');
+        }
+        if($this->parameters['exter_invoke_ip'] !== null && strlen($this->parameters['exter_invoke_ip']) > 15){
+            throw new PaymentException('exter_invoke_ip 必须小于 15 个字符');
+        }
+        if($this->parameters['extra_common_param'] !== null && strlen($this->parameters['extra_common_param']) > 100){
+            throw new PaymentException('extra_common_param 必须小于 100 个字符');
+        }
+
     }
+
 
     /**
      * 支付宝合作商户网站唯一订单号。
@@ -415,10 +458,10 @@ class AlipayDirectParameter extends OrderParameter
      * 用于控制收银台支付渠道显示，该值的取值范围请参见支付渠道。
      * 可支持多种支付渠道显示，以“^”分隔。
      *
-     * @param string $enable_paymethod
+     * @param array $enable_paymethod
      * @return $this
      */
-    public function setEnablePaymethod($enable_paymethod = null)
+    public function setEnablePaymethod(array $enable_paymethod = null)
     {
         $this->parameters['enable_paymethod'] = $enable_paymethod;
         return $this;

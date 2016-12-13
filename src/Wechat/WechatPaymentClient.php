@@ -10,7 +10,7 @@ namespace Payment\Wechat;
 
 use Payment\Exceptions\PaymentException;
 use Payment\Parameters\AbstractParameter;
-use Payment\AbstractPaymentProvider;
+use Payment\PaymentClient;
 use Payment\Parameters\AppParameter;
 use Payment\Parameters\BillParameter;
 use Payment\Parameters\CloseOrderParameter;
@@ -27,10 +27,10 @@ use Payment\Wechat\Parameters\WechatShortUrlParameter;
 
 /**
  * 微信支付接口
- * Class WechatPaymentProvider
+ * Class WechatPaymentClient
  * @package Payment\Wechat
  */
-class WechatPaymentProvider extends AbstractPaymentProvider
+class WechatPaymentClient extends PaymentClient
 {
     /**
      * 获取生成微信用户扫码支付的二维码内容，该接口实现的是微信用户扫码模式一

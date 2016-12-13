@@ -8,7 +8,7 @@
 require_once __DIR__ . '/../../autoload.php';
 
 use Payment\Alipay\AlipayConfiguration;
-use Payment\Alipay\AlipayTradePaymentProvider;
+use Payment\Alipay\AlipayPaymentClient;
 use Payment\Alipay\Parameters\AlipayWapTransParameter;
 
 $config = new AlipayConfiguration();
@@ -25,7 +25,7 @@ $parameter->setEmail($config->get('seller_email'));
 $parameter->setPayDate(date('Ymd'));
 $parameter->setRsaPrivatePath($config->get('rsa_private_path'));
 
-$provider = new AlipayTradePaymentProvider($config);
+$provider = new AlipayPaymentClient($config);
 
 $result = $provider->handle($parameter);
 

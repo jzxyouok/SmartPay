@@ -11,7 +11,7 @@ require_once __DIR__ . '/../autoload.php';
 use Payment\Wechat\Parameters\WechatCloseOrderParameter;
 use Payment\Wechat\Parameters\WechatQrCodeParameter;
 use Payment\Wechat\WechatConfiguration;
-use Payment\Wechat\WechatPaymentProvider;
+use Payment\Wechat\WechatPaymentClient;
 
 //初始化配置信息
 $config = new WechatConfiguration();

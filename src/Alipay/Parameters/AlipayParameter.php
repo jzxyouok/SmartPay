@@ -42,8 +42,8 @@ class AlipayParameter
             isset($param['version']) and $this->setVersion($param['version']);
             isset($param['notify_url']) and $this->setVersion($param['notify_url']);
             isset($param['app_auth_token']) and $this->setVersion($param['app_auth_token']);
-            isset($param['rsa_private_path']) and $this->setVersion($param['rsa_private_path']);
-            isset($param['rsa_public_path']) and $this->setVersion($param['rsa_public_path']);
+            isset($param['open_rsa_private_path']) and $this->setVersion($param['open_rsa_private_path']);
+            isset($param['open_rsa_public_path']) and $this->setVersion($param['open_rsa_public_path']);
         }elseif (is_object($param)){
             isset($param->appid) and $this->setAppId($param->appid);
             isset($param->format) and $this->setFormat($param->format);
@@ -54,8 +54,8 @@ class AlipayParameter
             isset($param->version) and $this->setVersion($param->version);
             isset($param->notify_url) and $this->setNotifyUrl($param->notify_url);
             isset($param->app_auth_token) and $this->setAppAuthToken($param->app_auth_token);
-            isset($param->rsa_private_path) and $this->setRsaPrivatePath($param->rsa_private_path);
-            isset($param->rsa_public_path) and $this->setRsaAliPubPath($param->rsa_public_path);
+            isset($param->open_rsa_private_path) and $this->setRsaPrivatePath($param->open_rsa_private_path);
+            isset($param->open_rsa_public_path) and $this->setRsaAliPubPath($param->open_rsa_public_path);
 
         }
     }

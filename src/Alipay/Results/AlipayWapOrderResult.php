@@ -25,6 +25,7 @@ class AlipayWapOrderResult extends AlipayWapNotify
     public function __construct(PayConfiguration $config)
     {
         parent::__construct($config);
+
     }
 
     /**

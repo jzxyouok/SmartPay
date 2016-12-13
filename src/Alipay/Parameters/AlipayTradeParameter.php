@@ -480,7 +480,6 @@ class AlipayTradeParameter extends TradeParameter
         $data['biz_content'] = json_encode($params, JSON_UNESCAPED_UNICODE);
 
         $this->requestData = $data;
-
     }
 
 
