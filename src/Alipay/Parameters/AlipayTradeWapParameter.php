@@ -27,14 +27,55 @@ class AlipayTradeWapParameter extends TradeParameter
 
     use AlipayParameterTrait;
 
+    protected $parameters = [
+        'body' => ['name' => 'body','type' => 'string', 'length' => 128, 'require' => false, 'value' => null],
+        'subject' => ['name' => 'subject','type' => 'string', 'length' => 256, 'require' => true, 'value' => null],
+        'out_trade_no' => ['name' => 'out_trade_no','type' => 'string', 'length' => 64, 'require' => true, 'value' => null],
+        'timeout_express' => ['name' => 'timeout_express','type' => 'string', 'length' => 6, 'require' => false, 'value' => '1d'],
+        'total_amount' => ['name' => 'total_amount','type' => 'float', 'length' => 9, 'require' => true, 'value' => null],
+        'seller_id' => ['name' => 'seller_id','type' => 'string', 'length' => 28, 'require' => false, 'value' => null],
+        'auth_token' => ['name' => 'auth_token','type' => 'string', 'length' => 40, 'require' => false, 'value' => null],
+        'product_code' => ['name' => 'product_code','type' => 'string', 'length' => 64, 'require' => false, 'value' => null],
+        'goods_type' => ['name' => 'goods_type','type' => 'string', 'length' => 2, 'require' => false, 'value' => '0'],
+        'passback_params' => ['name' => 'passback_params','type' => 'string', 'length' => 512, 'require' => false, 'value' => null],
+        'promo_params' => ['name' => 'promo_params','type' => 'json', 'length' => 512, 'require' => false, 'value' => null],
+        'extend_params' => ['name' => 'extend_params','type' => 'json', 'length' => 128, 'require' => false, 'value' => null],
+        'enable_pay_channels' => ['name' => 'enable_pay_channels','type' => 'string', 'length' => 128, 'require' => false, 'value' => null],
+        'disable_pay_channels' => ['name' => 'disable_pay_channels','type' => 'string', 'length' => 128, 'require' => false, 'value' => null],
+    ];
+
     protected function buildData()
     {
-        // TODO: Implement buildData() method.
+        $params = array();
+        foreach ($this->parameters as $key => $item){
+            if(isset($item['value'])){
+                if($item['type'] == 'json'){
+                    $params[$key] = json_encode($item['value'],JSON_UNESCAPED_UNICODE);
+                }else{
+                    $params[$key] = $item['value'];
+                }
+            }
+        }
+
+        $this->parameter->checkParams();
+
+        $data = $this->parameter->getData();
+
+        $data['biz_content'] = json_encode($params, JSON_UNESCAPED_UNICODE);
+
+        $this->requestData = $data;
     }
 
     protected function checkDataParams()
     {
-        // TODO: Implement checkDataParams() method.
+        foreach ($this->parameters as $key => $item){
+            if(isset($item['require']) && $item['require'] && (!isset($item['value']) || $item['value'] === null)){
+                throw new PaymentException('提交被扫支付API接口中，缺少必填参数 ' . $key);
+            }
+            if($item['type'] === 'string' && isset($item['value']) && $item['value'] === null && mb_strlen($item['value']) > $item['length']){
+                throw new PaymentException('提交被扫支付API接口中，参数 ' . $key . ' 长度不能超过 ' . $item['length'] );
+            }
+        }
     }
 
     /**
@@ -44,16 +85,18 @@ class AlipayTradeWapParameter extends TradeParameter
      */
     public function getBody()
     {
-        return $this->body;
+        return $this->parameters['body']['value'];
     }
 
     /**
      * 对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。
      * @param string $body
+     * @return $this
      */
     public function setBody($body = null)
     {
-        $this->body = $body;
+        $this->parameters['body']['value'] = $body;
+        return $this;
     }
 
     /**
@@ -63,17 +106,19 @@ class AlipayTradeWapParameter extends TradeParameter
      */
     public function getSubject()
     {
-        return $this->subject;
+        return $this->parameters['subject']['value'];
     }
 
     /**
      * 商品的标题/交易标题/订单标题/订单关键字等。
      *
      * @param string $subject
+     * @return $this
      */
     public function setSubject($subject)
     {
-        $this->subject = $subject;
+        $this->parameters['subject']['value'] = $subject;
+        return $this;
     }
 
     /**
@@ -83,17 +128,19 @@ class AlipayTradeWapParameter extends TradeParameter
      */
     public function getOutTradeNo()
     {
-        return $this->out_trade_no;
+        return $this->parameters['out_trade_no']['value'];
     }
 
     /**
      * 商户网站唯一订单号
      *
      * @param string $out_trade_no
+     * @return $this
      */
     public function setOutTradeNo($out_trade_no)
     {
-        $this->out_trade_no = $out_trade_no;
+        $this->parameters['out_trade_no']['value'] = $out_trade_no;
+        return $this;
     }
 
     /**
@@ -105,7 +152,7 @@ class AlipayTradeWapParameter extends TradeParameter
      */
     public function getTimeoutExpress()
     {
-        return $this->timeout_express;
+        return $this->parameters['timeout_express']['value'];
     }
 
     /**
@@ -114,170 +161,249 @@ class AlipayTradeWapParameter extends TradeParameter
      * 该参数数值不接受小数点， 如 1.5h，可转换为 90m。
      *
      * @param string $timeout_express
+     * @return $this
      */
     public function setTimeoutExpress($timeout_express = '1d')
     {
-        $this->timeout_express = $timeout_express;
+        $this->parameters['timeout_express']['value'] = $timeout_express;
+        return $this;
     }
 
     /**
+     * 订单总金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]
+     *
      * @return string
      */
     public function getTotalAmount()
     {
-        return $this->total_amount;
+        return $this->parameters['total_amount']['value'];
     }
 
     /**
+     * 订单总金额，单位为元，精确到小数点后两位，取值范围[0.01,100000000]
+     *
      * @param string $total_amount
+     * @return $this
      */
     public function setTotalAmount($total_amount)
     {
-        $this->total_amount = $total_amount;
+        $this->parameters['total_amount']['value'] = $total_amount;
+        return $this;
     }
 
     /**
+     * 收款支付宝用户ID。 如果该值为空，则默认为商户签约账号对应的支付宝用户ID
+     *
      * @return string
      */
     public function getSellerId()
     {
-        return $this->seller_id;
+        return $this->parameters['seller_id']['value'];
     }
 
     /**
+     * 收款支付宝用户ID。 如果该值为空，则默认为商户签约账号对应的支付宝用户ID
+     *
      * @param string $seller_id
+     * @return $this
      */
-    public function setSellerId($seller_id)
+    public function setSellerId($seller_id = null)
     {
-        $this->seller_id = $seller_id;
+        $this->parameters['seller_id']['value'] = $seller_id;
+        return $this;
     }
 
     /**
+     * 针对用户授权接口，获取用户相关数据时，用于标识用户授权关系
+     *
      * @return string
      */
     public function getAuthToken()
     {
-        return $this->auth_token;
+        return $this->parameters['auth_token']['value'];
     }
 
     /**
+     * 针对用户授权接口，获取用户相关数据时，用于标识用户授权关系
+     *
      * @param string $auth_token
+     * @return $this
      */
-    public function setAuthToken($auth_token)
+    public function setAuthToken($auth_token = null)
     {
-        $this->auth_token = $auth_token;
+        $this->parameters['auth_token']['value'] = $auth_token;
+        return $this;
     }
 
     /**
+     * 销售产品码，商家和支付宝签约的产品码
+     *
      * @return string
      */
     public function getProductCode()
     {
-        return $this->product_code;
+        return $this->parameters['product_code']['value'];
     }
 
     /**
+     * 销售产品码，商家和支付宝签约的产品码
+     *
      * @param string $product_code
+     * @return $this
      */
     public function setProductCode($product_code)
     {
-        $this->product_code = $product_code;
+        $this->parameters['product_code']['value'] = $product_code;
+        return $this;
     }
 
     /**
+     * 商品主类型：0—虚拟类商品，1—实物类商品
+     * 注：虚拟类商品不支持使用花呗渠道
+     *
      * @return string
      */
     public function getGoodsType()
     {
-        return $this->goods_type;
+        return $this->parameters['goods_type']['value'];
     }
 
     /**
+     *  商品主类型：0—虚拟类商品，1—实物类商品
+     *  注：虚拟类商品不支持使用花呗渠道
+     *
      * @param string $goods_type
+     * @return $this
      */
-    public function setGoodsType($goods_type)
+    public function setGoodsType($goods_type = '0')
     {
-        $this->goods_type = $goods_type;
+        $this->parameters['goods_type']['value'] = $goods_type;
+        return $this;
     }
 
     /**
+     * 公用回传参数，如果请求时传递了该参数，则返回给商户时会回传该参数。支付宝会在异步通知时将该参数原样返回。
+     * 本参数必须进行UrlEncode之后才可以发送给支付宝
+     *
      * @return string
      */
     public function getPassbackParams()
     {
-        return $this->passback_params;
+        return $this->parameters['passback_params']['value'];
     }
 
     /**
+     * 公用回传参数，如果请求时传递了该参数，则返回给商户时会回传该参数。支付宝会在异步通知时将该参数原样返回。
+     * 本参数必须进行UrlEncode之后才可以发送给支付宝
+     *
      * @param string $passback_params
+     * @return $this
      */
-    public function setPassbackParams($passback_params)
+    public function setPassbackParams($passback_params = null)
     {
-        $this->passback_params = $passback_params;
+        $this->parameters['passback_params']['value'] = $passback_params;
+        return $this;
     }
 
     /**
+     * 优惠参数
+     * 注：仅与支付宝协商后可用
+     *
      * @return string
      */
     public function getPromoParams()
     {
-        return $this->promo_params;
+        return $this->parameters['promo_params']['value']['storeIdType'];
     }
 
     /**
+     * 优惠参数
+     * 注：仅与支付宝协商后可用
+     *
      * @param string $promo_params
+     * @return $this
      */
-    public function setPromoParams($promo_params)
+    public function setPromoParams($promo_params = null)
     {
-        $this->promo_params = $promo_params;
+        $this->parameters['promo_params']['value']['storeIdType'] = $promo_params;
+        return $this;
     }
 
     /**
+     * 业务扩展参数
+     *
      * @return string
      */
     public function getExtendParams()
     {
-        return $this->extend_params;
+        if(isset($this->parameters['extend_params']['value']['sys_service_provider_id'] )) {
+            return $this->parameters['extend_params']['value']['sys_service_provider_id'];
+        }
+        return null;
     }
 
     /**
+     * 业务扩展参数
+     *
      * @param string $extend_params
+     * @return $this
      */
-    public function setExtendParams($extend_params)
+    public function setExtendParams($extend_params = null)
     {
-        $this->extend_params = $extend_params;
+        $this->parameters['extend_params']['value']['sys_service_provider_id'] = $extend_params;
+        return $this;
     }
 
     /**
+     * 可用渠道，用户只能在指定渠道范围内支付
+     * 当有多个渠道时用“,”分隔
+     * 注：与disable_pay_channels互斥
+     *
      * @return string
      */
     public function getEnablePayChannels()
     {
-        return $this->enable_pay_channels;
+        return $this->parameters['enable_pay_channels']['value'];
     }
 
     /**
+     * 可用渠道，用户只能在指定渠道范围内支付
+     * 当有多个渠道时用“,”分隔
+     * 注：与disable_pay_channels互斥
+     *
      * @param string $enable_pay_channels
+     * @return $this
      */
-    public function setEnablePayChannels($enable_pay_channels)
+    public function setEnablePayChannels($enable_pay_channels = null)
     {
-        $this->enable_pay_channels = $enable_pay_channels;
+        $this->parameters['enable_pay_channels']['value'] = $enable_pay_channels;
+        return $this;
     }
 
     /**
+     * 禁用渠道，用户不可用指定渠道支付
+     * 当有多个渠道时用“,”分隔
+     * 注：与enable_pay_channels互斥
+     *
      * @return string
      */
     public function getDisablePayChannels()
     {
-        return $this->disable_pay_channels;
+        return $this->parameters['disable_pay_channels']['value'];
     }
 
     /**
+     * 禁用渠道，用户不可用指定渠道支付
+     * 当有多个渠道时用“,”分隔
+     * 注：与enable_pay_channels互斥
+     *
      * @param string $disable_pay_channels
+     * @return $this
      */
-    public function setDisablePayChannels($disable_pay_channels)
+    public function setDisablePayChannels($disable_pay_channels = null)
     {
-        $this->disable_pay_channels = $disable_pay_channels;
+        $this->parameters['disable_pay_channels']['value'] = $disable_pay_channels;
+        return $this;
     }
 
 

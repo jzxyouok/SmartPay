@@ -8,6 +8,10 @@
 
 namespace Payment\Alipay;
 
+use Payment\Alipay\Results\AlipayTradeCloseResult;
+use Payment\Alipay\Results\AlipayTradeQueryResult;
+use Payment\Configuration\PayConfiguration;
+use Payment\Exceptions\PaymentException;
 use Payment\PaymentClient;
 use Payment\Alipay\Parameters\AlipayDirectParameter;
 use Payment\Alipay\Parameters\AlipayWapOrderParameter;
@@ -35,6 +39,13 @@ use Payment\Parameters\TradeParameter;
 class AlipayPaymentClient extends PaymentClient
 {
 
+    public function __construct(PayConfiguration $config)
+    {
+        mb_internal_encoding("UTF-8");
+        parent::__construct($config);
+
+    }
+
     public function unifiedOrder(PreOrderParameter $parameter)
     {
         $url = $this->config->get('alipay_url');
@@ -53,7 +64,6 @@ class AlipayPaymentClient extends PaymentClient
     {
         return $this->handle($parameter);
     }
-
 
 
     public function handle(AbstractParameter $parameter)
@@ -110,12 +120,58 @@ class AlipayPaymentClient extends PaymentClient
 
             $data = http_build_query($parameter->getRequestData());
 
-            $header['content-type'] = 'application/x-www-form-urlencoded;charset=' . $this->config->get('charset','utf-8');
 
-            $result = $this->post($data,$url,30,null,$header);
-
-            return $result;
+            return $url . '?' . $data;
         }
+        //统一收单线下交易查询
+        if($parameter instanceof QueryOrderParameter){
+            $url = $this->config->get('open_alipay_url');
+
+            $parameter->sign();
+            $data = $parameter->getRequestData();
+
+            $header['Content-Type'] = 'application/x-www-form-urlencoded;charset=' . $this->config->get('charset','utf-8').';';
+
+
+            $result = $this->post($data,$url,30,null,null);
+
+            $charset = mb_detect_encoding($result, "UTF-8,GBK");
+            //如果编码不是UTF-8则转换
+            if(strcasecmp($charset,'UTF-8')){
+                $result = mb_convert_encoding($result,'UTF-8',$charset);
+            }
+
+
+            $json = json_decode($result,true);
+
+
+            return $json === null ? null : new AlipayTradeQueryResult($json);
+        }
+        //统一收单交易关闭接口
+        if($parameter instanceof CloseOrderParameter){
+            $url = $this->config->get('open_alipay_url');
+
+            $parameter->sign();
+            $data = $parameter->getRequestData();
+
+            $header['Content-Type'] = 'application/x-www-form-urlencoded;charset=' . $this->config->get('charset','utf-8').';';
+
+
+            $result = $this->post($data,$url,30,null,null);
+
+            $charset = mb_detect_encoding($result, "UTF-8,GBK");
+            //如果编码不是UTF-8则转换
+            if(strcasecmp($charset,'UTF-8')){
+                $result = mb_convert_encoding($result,'UTF-8',$charset);
+            }
+
+
+            $json = json_decode($result,true);
+
+
+            return $json === null ? null : new AlipayTradeCloseResult($json);
+        }
+
         return null;
     }
 }

@@ -23,9 +23,11 @@ use Payment\Support\Traits\AlipayParameterTrait;
  */
 class AlipayTradeParameter extends TradeParameter
 {
+
     protected $method = 'alipay.trade.pay';
 
     use AlipayParameterTrait;
+
 
     protected $parameters = array(
         'out_trade_no'          => ['name' => 'out_trade_no','type' => 'string', 'length' => 64, 'require' => true, 'value' => null],
@@ -467,6 +469,7 @@ class AlipayTradeParameter extends TradeParameter
 
     protected function buildData()
     {
+        //@TODO 数组与json
         $params = array();
         foreach ($this->parameters as $key => $item){
             if(isset($item['value']) &&  $item['value'] !== null){

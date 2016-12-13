@@ -146,7 +146,7 @@ class AlipayParameter
      */
     public function setCharset($charset = 'utf-8')
     {
-        $this->charset = $charset;
+        $this->charset = strtoupper($charset);
         return $this;
     }
 

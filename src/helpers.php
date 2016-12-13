@@ -184,3 +184,19 @@ if(!function_exists('rsa_verify')) {
         return $result;
     }
 }
+
+if(!function_exists('array_value')) {
+    /**
+     * 获取数组中的值
+     * @param string $key 键名
+     * @param array $needle 数组
+     * @param null $default 默认值
+     * @return mixed|null
+     */
+    function array_value($key,array $needle,$default = null){
+        if(isset($needle[$key])){
+            return $needle[$key];
+        }
+        return $default;
+    }
+}
