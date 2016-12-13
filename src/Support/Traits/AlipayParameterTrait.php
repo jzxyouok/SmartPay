@@ -13,6 +13,10 @@ trait AlipayParameterTrait
 {
     protected $_data = array();
     /**
+     * @var string 接口名称
+     */
+    protected $method = '';
+    /**
      * @var AlipayParameter 公共参数
      */
     protected $parameter ;

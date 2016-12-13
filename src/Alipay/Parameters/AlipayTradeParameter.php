@@ -17,6 +17,7 @@ use Payment\Support\Traits\AlipayParameterTrait;
  * 当面付下单参数
  * <p>收银员使用扫码设备读取用户手机支付宝“付款码”/声波获取设备（如麦克风）读取用户手机支付宝的声波信息后，将二维码或条码信息/声波信息通过本接口上送至支付宝发起支付。</p>
  * Class AlipayTradeParameter.php
+ * @link https://doc.open.alipay.com/doc2/apiDetail.htm?spm=a219a.7629065.0.0.PlTwKb&apiId=850&docType=4
  * @package Payment\Alipay\Parameters
  *
  */

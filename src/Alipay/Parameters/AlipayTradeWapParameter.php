@@ -14,27 +14,17 @@ use Payment\Parameters\TradeParameter;
 use Payment\Support\Traits\AlipayParameterTrait;
 
 /**
- * Class AlipayTradeWapParameter
- * @package Payment\Alipay\Parameters
+ * 手机网站支付接口
  *
- * @property string $body
- * @property string $subject
- * @property string $out_trade_no
- * @property string $timeout_express
- * @property string $total_amount
- * @property string $seller_id
- * @property string $auth_token
- * @property string $product_code
- * @property string $goods_type
- * @property string $passback_params
- * @property string $promo_params
- * @property string $extend_params
- * @property string $enable_pay_channels
- * @property string $disable_pay_channels
+ * @link https://doc.open.alipay.com/doc2/detail.htm?treeId=203&articleId=105463&docType=1
+ *
+ * @package Payment\Alipay\Parameters
  *
  */
 class AlipayTradeWapParameter extends TradeParameter
 {
+    protected $method = 'alipay.trade.wap.pay';
+
     use AlipayParameterTrait;
 
     protected function buildData()
