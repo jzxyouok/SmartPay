@@ -14,14 +14,12 @@ use Payment\Parameters\CloseOrderParameter;
 use Payment\Support\Traits\WechatParameterTrait;
 
 /**
- * Class WechatCloseOrderParameter
+ * 关闭订单接口
+ *
+ * @link https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_3
+ *
  * @package Payment\Wechat\Parameters
- * @property string $appid 微信分配的公众账号ID（企业号corpid即为此appId）
- * @property string $mch_id 微信支付分配的商户号
- * @property string $out_trade_no 商户系统内部的订单号,32个字符内、可包含字母
- * @property string $nonce_str 随机字符串，不长于32位。
- * @property string $sign 签名
- * @property string $sign_type 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
+ *
  */
 class WechatCloseOrderParameter extends CloseOrderParameter
 {

@@ -22,6 +22,8 @@ use Payment\Support\Traits\WechatParameterTrait;
  * 3、对账单中涉及金额的字段单位为“元”。
  * 4、对账单接口只能下载三个月以内的账单。
  *
+ * @link https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_6
+ *
  * @package Payment\Wechat\Parameters
  *
  */

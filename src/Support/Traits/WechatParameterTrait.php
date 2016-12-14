@@ -37,24 +37,27 @@ trait WechatParameterTrait
         return $this->key;
     }
     /**
+     *  微信分配的公众账号ID（企业号corpid即为此appId）
      * @return string
      */
-    public function getAppid()
+    public function getAppId()
     {
         return $this->appid;
     }
 
     /**
+     *  微信分配的公众账号ID（企业号corpid即为此appId）
      * @param string $appid
      * @return mixed
      */
-    public function setAppid($appid)
+    public function setAppId($appid)
     {
         $this->appid = $appid;
         return $this;
     }
 
     /**
+     * 微信支付分配的商户号
      * @return string
      */
     public function getMchId()
@@ -63,6 +66,7 @@ trait WechatParameterTrait
     }
 
     /**
+     * 微信支付分配的商户号
      * @param string $mch_id
      * @return mixed
      */

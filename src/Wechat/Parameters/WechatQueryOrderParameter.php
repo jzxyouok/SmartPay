@@ -15,15 +15,11 @@ use Payment\Support\Traits\WechatParameterTrait;
 
 /**
  * 订单查询参数
- * Class WechatQueryOrderParameter
+ *
+ * @link https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=9_2
+ *
  * @package Payment\Wechat\Parameters
- * @property string $appid 微信分配的公众账号ID（企业号corpid即为此appId）
- * @property string $mch_id 微信支付分配的商户号
- * @property string $transaction_id 微信的订单号，优先使用
- * @property string $out_trade_no 商户系统内部的订单号，当没提供transaction_id时需要传这个。
- * @property string $nonce_str 随机字符串，不长于32位。
- * @property string $sign 签名
- * @property string $sign_type 签名类型，目前支持HMAC-SHA256和MD5，默认为MD5
+ *
  */
 class WechatQueryOrderParameter extends QueryOrderParameter
 {

@@ -39,33 +39,201 @@ class WechatPaymentClient extends PaymentClient
      */
     public function createQrCode(QrCodeParameter $parameter)
     {
-        $parameter->sign();
-        $url = "weixin://wxpay/bizpayurl?sign={$parameter->sign}&appid={$parameter->appid}&mch_id={$parameter->mch_id}&product_id={$parameter->product_id}&time_stamp={$parameter->time_stamp}&nonce_str={$parameter->nonce_str}";
-
-        return $url;
+        return $this->handle($parameter);
     }
 
     /**
-     * 统一处理参数
-     * @param $url
-     * @param AbstractParameter $parameters
-     * @return WechatResult
+     *
+     * 执行对应参数的处理方法
+     * @param AbstractParameter $parameter
+     * @return mixed|null|WechatResult|string
+     * @throws PaymentException
      */
-    protected function handle($url, AbstractParameter $parameters)
+    public function handle(AbstractParameter $parameter)
     {
-        $parameters->sign();
+        //获取生成微信用户扫码支付的二维码内容，该接口实现的是微信用户扫码模式一
+        if($parameter instanceof QrCodeParameter){
+            $parameter->sign();
+            $url = "weixin://wxpay/bizpayurl?sign={$parameter->sign}&appid={$parameter->appid}&mch_id={$parameter->mch_id}&product_id={$parameter->product_id}&time_stamp={$parameter->time_stamp}&nonce_str={$parameter->nonce_str}";
 
-        $params = $parameters->getRequestData();
+            return $url;
+        }
+        //刷卡下单接口
+        if($parameter instanceof TradeParameter){
+            $url = $this->config->get('micropay_url');
+            $parameter->sign();
 
-        $param = convert_array_to_xml($params);
+            $params = $parameter->getRequestData();
 
-        $responseText = $this->post($param, $url);
+            $param = convert_array_to_xml($params);
 
-        $response = convert_xml_to_array($responseText);
+            $responseText = $this->post($param, $url);
 
-        $result = new WechatResult($response);
+            $response = convert_xml_to_array($responseText);
 
-        return $result;
+            $result = new WechatResult($response);
+
+            return $result;
+        }
+        //创建支付订单
+        if($parameter instanceof OrderParameter){
+            $url = $this->config->get('unifiedorder_url');
+            $parameter->sign();
+
+            $params = $parameter->getRequestData();
+
+            $param = convert_array_to_xml($params);
+
+            $responseText = $this->post($param, $url);
+
+            $response = convert_xml_to_array($responseText);
+
+            $result = new WechatResult($response);
+
+            return $result;
+        }
+        //订单查询接口
+        if($parameter instanceof QueryOrderParameter){
+            $url = $this->config->get('orderquery_url');
+            $parameter->sign();
+
+            $params = $parameter->getRequestData();
+
+            $param = convert_array_to_xml($params);
+
+            $responseText = $this->post($param, $url);
+
+            $response = convert_xml_to_array($responseText);
+
+            $result = new WechatResult($response);
+
+            return $result;
+        }
+        //关闭订单
+        if($parameter instanceof CloseOrderParameter){
+            $url = $this->config->get('closeorder_url');
+            $parameter->sign();
+
+            $params = $parameter->getRequestData();
+
+            $param = convert_array_to_xml($params);
+
+            $responseText = $this->post($param, $url);
+
+            $response = convert_xml_to_array($responseText);
+
+            $result = new WechatResult($response);
+
+            return $result;
+        }
+        //订单退款
+        if($parameter instanceof RefundParameter){
+            $url = $this->config->get('refund_url');
+
+
+            if(empty($this->config->get('sslcert'))){
+                throw new PaymentException('退款接口需要双向SSL证书加密，配置中未找到证书');
+            }
+
+            $parameter->sign();
+
+            $params = $parameter->getRequestData();
+
+
+            $param = convert_array_to_xml($params);
+
+            $responseText = $this->post($param, $url,$this->config->get('sslcert'));
+
+            $response = convert_xml_to_array($responseText);
+
+            $result = new WechatResult($response);
+
+            return $result;
+        }
+
+        if($parameter instanceof RefundQueryParameter){
+            $url = $this->config->get('refundquery_url');
+            $parameter->sign();
+
+            $params = $parameter->getRequestData();
+
+            $param = convert_array_to_xml($params);
+
+            $responseText = $this->post($param, $url);
+
+            $response = convert_xml_to_array($responseText);
+
+            $result = new WechatResult($response);
+
+            return $result;
+        }
+        //下载对账单
+        if($parameter instanceof BillParameter){
+            $parameter->sign();
+
+            $params = $parameter->getRequestData();
+
+            $param = convert_array_to_xml($params);
+
+
+            $responseText = $this->post($param, $this->config->get('querybill_url'));
+
+            if(substr($responseText, 0 , 5) == "<xml>"){
+                $response = convert_xml_to_array($responseText);
+
+                $result = new WechatResult($response);
+
+                return $result;
+            }else{
+                return $responseText;
+            }
+        }
+        //生成短链接
+        if($parameter instanceof WechatShortUrlParameter){
+            $url = $this->config->get('shorturl_url');
+            $parameter->sign();
+
+            $params = $parameter->getRequestData();
+
+            $param = convert_array_to_xml($params);
+
+            $responseText = $this->post($param, $url);
+
+            $response = convert_xml_to_array($responseText);
+
+            $result = new WechatResult($response);
+
+            return $result;
+        }
+        //获取APP调起微信支付的签名
+        if($parameter instanceof AppParameter){
+            $parameter->sign();
+            return $parameter->sign;
+        }
+        if($parameter instanceof ReverseParameter){
+            $url = $this->config->get('reverse_url');
+
+
+            if(empty($this->config->get('sslcert'))){
+                throw new PaymentException('撤销订单接口需要双向SSL证书加密，配置中未找到证书');
+            }
+
+            $parameter->sign();
+
+            $params = $parameter->getRequestData();
+
+
+            $param = convert_array_to_xml($params);
+
+            $responseText = $this->post($param, $url,$this->config->get('sslcert'));
+
+            $response = convert_xml_to_array($responseText);
+
+            $result = new WechatResult($response);
+
+            return $result;
+        }
+        return null;
     }
 
     /**
@@ -75,9 +243,7 @@ class WechatPaymentClient extends PaymentClient
      */
     public function micropay(TradeParameter $parameters)
     {
-        $url = $this->config->get('micropay_url');
-
-        $result = $this->handle($url,$parameters);
+        $result = $this->handle($parameters);
 
         return $result;
     }
@@ -90,13 +256,7 @@ class WechatPaymentClient extends PaymentClient
      */
     public function createOrder(OrderParameter $parameter)
     {
-        $url = $this->config->get('unifiedorder_url');
-
-        if(empty($url)){
-            throw new PaymentException('不支持的支付类型');
-        }
-
-        $result = $this->handle($url,$parameter);
+        $result = $this->handle($parameter);
 
         return $result;
     }
@@ -109,24 +269,8 @@ class WechatPaymentClient extends PaymentClient
      */
     public function unifiedOrder(PreOrderParameter $parameter)
     {
-        $url = $this->config->get('unifiedorder_url');
 
-        if(empty($url)){
-            throw new PaymentException('不支持的支付类型');
-        }
-
-        $parameter->sign();
-
-        $params = $parameter->getRequestData();
-
-
-        $param = convert_array_to_xml($params);
-
-        $responseText = $this->post($param, $url);
-
-        $response = convert_xml_to_array($responseText);
-
-        $result = new WechatResult($response);
+        $result = $this->handle($parameter);
 
         return $result;
     }
@@ -138,9 +282,7 @@ class WechatPaymentClient extends PaymentClient
      */
     public function queryOrder(QueryOrderParameter $parameter)
     {
-        $url = $this->config->get('orderquery_url');
-
-        $result = $this->handle($url,$parameter);
+        $result = $this->handle($parameter);
 
         return $result;
     }
@@ -152,9 +294,7 @@ class WechatPaymentClient extends PaymentClient
      */
     public function closeOrder(CloseOrderParameter $parameters)
     {
-        $url = $this->config->get('closeorder_url');
-
-        $result = $this->handle($url,$parameters);
+        $result = $this->handle($parameters);
 
         return $result;
     }
@@ -167,25 +307,7 @@ class WechatPaymentClient extends PaymentClient
      */
     public function refund(RefundParameter $parameter)
     {
-        $url = $this->config->get('refund_url');
-
-
-        if(empty($this->config->get('sslcert'))){
-            throw new PaymentException('退款接口需要双向SSL证书加密，配置中未找到证书');
-        }
-
-        $parameter->sign();
-
-        $params = $parameter->getRequestData();
-
-
-        $param = convert_array_to_xml($params);
-
-        $responseText = $this->post($param, $url,$this->config->get('sslcert'));
-
-        $response = convert_xml_to_array($responseText);
-
-        $result = new WechatResult($response);
+        $result = $this->handle($parameter);
 
         return $result;
     }
@@ -197,38 +319,19 @@ class WechatPaymentClient extends PaymentClient
      */
     public function refundQuery(RefundQueryParameter $parameters)
     {
-        $url = $this->config->get('refundquery_url');
-
-        $result = $this->handle($url,$parameters);
+        $result = $this->handle($parameters);
 
         return $result;
     }
 
     /**
      * 下载对账单
-     * @param BillParameter $parameters
+     * @param BillParameter $parameter
      * @return mixed|WechatResult
      */
-    public function queryBill(BillParameter $parameters)
+    public function queryBill(BillParameter $parameter)
     {
-        $parameters->sign();
-
-        $params = $parameters->getRequestData();
-
-        $param = convert_array_to_xml($params);
-
-
-        $responseText = $this->post($param, $this->config->get('querybill_url'));
-
-        if(substr($responseText, 0 , 5) == "<xml>"){
-            $response = convert_xml_to_array($responseText);
-
-            $result = new WechatResult($response);
-
-            return $result;
-        }else{
-            return $responseText;
-        }
+        return $this->handle($parameter);
     }
 
     /**
@@ -248,9 +351,7 @@ class WechatPaymentClient extends PaymentClient
      */
     public function createShortUrl(WechatShortUrlParameter $parameters)
     {
-        $url = $this->config->get('shorturl_url');
-
-        $result = $this->handle($url,$parameters);
+        $result = $this->handle($parameters);
 
         return $result;
     }
@@ -262,8 +363,7 @@ class WechatPaymentClient extends PaymentClient
      */
     public function createAppSign(AppParameter $parameter)
     {
-        $parameter->sign();
-        return $parameter->sign;
+        return $this->handle($parameter);
     }
 
     /**
@@ -275,25 +375,7 @@ class WechatPaymentClient extends PaymentClient
      */
     public function reverse(ReverseParameter $parameter)
     {
-        $url = $this->config->get('reverse_url');
-
-
-        if(empty($this->config->get('sslcert'))){
-            throw new PaymentException('撤销订单接口需要双向SSL证书加密，配置中未找到证书');
-        }
-
-        $parameter->sign();
-
-        $params = $parameter->getRequestData();
-
-
-        $param = convert_array_to_xml($params);
-
-        $responseText = $this->post($param, $url,$this->config->get('sslcert'));
-
-        $response = convert_xml_to_array($responseText);
-
-        $result = new WechatResult($response);
+        $result = $this->handle($parameter);
 
         return $result;
     }

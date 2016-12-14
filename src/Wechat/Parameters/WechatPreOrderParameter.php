@@ -15,6 +15,8 @@ use Payment\Support\Traits\WechatParameterTrait;
 
 /**
  * 微信统一下单参数
+ * @link https://pay.weixin.qq.com/wiki/doc/api/jsapi.php?chapter=9_1
+ *
  * Class WechatUnifiedOrderParameter
  * @package Payment\Wechat
  */

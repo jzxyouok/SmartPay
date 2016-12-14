@@ -18,6 +18,8 @@ use Payment\Support\Traits\WechatParameterTrait;
  *
  * 微信扫码支付模式一的二维码生成
  *
+ * @link https://pay.weixin.qq.com/wiki/doc/api/native.php?chapter=6_4
+ *
  * @package Payment\Wechat\Parameters
  *
  */

@@ -62,6 +62,15 @@ abstract class AbstractParameter implements ParameterInterface
         }
     }
 
+    public function __isset($name)
+    {
+        if($name == 'appid'){
+            return true;
+        }
+        return isset($this->requestData[$name]);
+    }
+
+
     public function sign()
     {
         //组织请求的数据
