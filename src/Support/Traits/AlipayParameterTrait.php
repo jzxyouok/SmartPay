@@ -19,10 +19,29 @@ trait AlipayParameterTrait
 
     public function __construct(AlipayParameter $parameter)
     {
+        mb_internal_encoding("UTF-8");
         $parameter->setMethod($this->method);
         $this->parameter = $parameter;
     }
 
+    protected function buildData()
+    {
+        $this->parameter->checkParams();
+
+        $data = $this->parameter->getData();
+
+        $params = [];
+
+        foreach ($this->parameters as $key=>$value){
+            if(empty($value)===false){
+                $params[$key] = $value;
+            }
+        }
+
+        $data['biz_content'] = json_encode($params, JSON_UNESCAPED_UNICODE);
+
+        $this->requestData = $data;
+    }
 
     protected function createSign()
     {
@@ -46,4 +65,5 @@ trait AlipayParameterTrait
 
        return $string;
     }
+
 }

@@ -21,7 +21,7 @@ $parameter = new AlipayParameter();
 $parameter->initialize($config);
 
 $params = new AlipayTradeQueryParameter($parameter);
-$params->setOutTradeNo('9999999999');
+$params->setTradeNo('2016121421001004480293190816');
 
 $client = new AlipayPaymentClient($config);
 

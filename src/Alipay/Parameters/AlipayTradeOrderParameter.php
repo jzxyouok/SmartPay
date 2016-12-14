@@ -16,12 +16,12 @@ use Payment\Support\Traits\AlipayParameterTrait;
 /**
  * 当面付下单参数
  * <p>收银员使用扫码设备读取用户手机支付宝“付款码”/声波获取设备（如麦克风）读取用户手机支付宝的声波信息后，将二维码或条码信息/声波信息通过本接口上送至支付宝发起支付。</p>
- * Class AlipayTradeParameter.php
+ * Class $this
  * @link https://doc.open.alipay.com/doc2/apiDetail.htm?spm=a219a.7629065.0.0.PlTwKb&apiId=850&docType=4
  * @package Payment\Alipay\Parameters
  *
  */
-class AlipayTradeParameter extends TradeParameter
+class AlipayTradeOrderParameter extends TradeParameter
 {
 
     protected $method = 'alipay.trade.pay';
@@ -78,7 +78,7 @@ class AlipayTradeParameter extends TradeParameter
      * - body 商品描述信息
      * - show_url 商品的展示地址
      * @param string $goods_detail
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setGoodsDetail($goods_detail = null)
     {
@@ -100,7 +100,7 @@ class AlipayTradeParameter extends TradeParameter
     /**
      * 商户操作员编号
      * @param string $operator_id
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setOperatorId($operator_id = null)
     {
@@ -121,7 +121,7 @@ class AlipayTradeParameter extends TradeParameter
     /**
      * 商户门店编号
      * @param string $store_id
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setStoreId($store_id = null)
     {
@@ -141,7 +141,7 @@ class AlipayTradeParameter extends TradeParameter
     /**
      * 商户机具终端编号
      * @param string $terminal_id
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setTerminalId($terminal_id = null)
     {
@@ -161,7 +161,7 @@ class AlipayTradeParameter extends TradeParameter
     /**
      * 支付宝的店铺编号
      * @param string $alipay_store_id
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setAlipayStoreId($alipay_store_id = null)
     {
@@ -186,7 +186,7 @@ class AlipayTradeParameter extends TradeParameter
      * - hb_fq_seller_percent 使用花呗分期需要卖家承担的手续费比例的百分值，传入100代表100%
      *
      * @param string $extend_params
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setExtendParams($extend_params = null)
     {
@@ -210,7 +210,7 @@ class AlipayTradeParameter extends TradeParameter
      * 取值范围：1m～15d。m-分钟，h-小时，d-天，1c-当天（1c-当天的情况下，无论交易何时创建，都在0点关闭）。 该参数数值不接受小数点， 如 1.5h，可转换为 90m
      *
      * @param string $timeout_express
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setTimeoutExpress($timeout_express = '1d')
     {
@@ -245,7 +245,7 @@ class AlipayTradeParameter extends TradeParameter
      * 描述分账信息，Json格式，其它说明详见分账说明
      *
      * @param string $royalty_info
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setRoyaltyInfo($royalty_info = null)
     {
@@ -266,11 +266,11 @@ class AlipayTradeParameter extends TradeParameter
     /**
      * 支付场景 条码支付，取值：bar_code 声波支付，取值：wave_code
      * @param string $scene
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setScene($scene)
     {
-        $this->parameters['scene']['value']['value'] = $scene;
+        $this->parameters['scene']['value'] = $scene;
         return $this;
     }
 
@@ -286,7 +286,7 @@ class AlipayTradeParameter extends TradeParameter
     /**
      * 支付授权码
      * @param string $auth_code
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setAuthCode($auth_code)
     {
@@ -306,7 +306,7 @@ class AlipayTradeParameter extends TradeParameter
     /**
      * 订单标题
      * @param string $subject
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setSubject($subject)
     {
@@ -326,7 +326,7 @@ class AlipayTradeParameter extends TradeParameter
     /**
      * 如果该值为空，则默认为商户签约账号对应的支付宝用户ID
      * @param string $seller_id
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setSellerId($seller_id = null)
     {
@@ -352,7 +352,7 @@ class AlipayTradeParameter extends TradeParameter
      * 如果同时传入了【可打折金额】，【不可打折金额】，【订单总金额】三者，则必须满足如下条件：【订单总金额】=【可打折金额】+【不可打折金额】
      *
      * @param int $total_amount
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setTotalAmount($total_amount)
     {
@@ -374,7 +374,7 @@ class AlipayTradeParameter extends TradeParameter
      * 参与优惠计算的金额，单位为元，精确到小数点后两位，
      * 取值范围[0.01,100000000]。 如果该值未传入，但传入了【订单总金额】和【不可打折金额】，则该值默认为【订单总金额】-【不可打折金额】
      * @param int $discountable_amount
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setDiscountableAmount($discountable_amount = null)
     {
@@ -396,7 +396,7 @@ class AlipayTradeParameter extends TradeParameter
      * 	不参与优惠计算的金额，单位为元，精确到小数点后两位，
      * 取值范围[0.01,100000000]。如果该值未传入，但传入了【订单总金额】和【可打折金额】，则该值默认为【订单总金额】-【可打折金额】
      * @param int $undiscountable_amount
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setUndiscountableAmount($undiscountable_amount = null)
     {
@@ -416,7 +416,7 @@ class AlipayTradeParameter extends TradeParameter
     /**
      * 订单描述
      * @param string $body
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setBody($body = null)
     {
@@ -437,7 +437,7 @@ class AlipayTradeParameter extends TradeParameter
      * 二级商户信息,当前只对特殊银行机构特定场景下使用此字段
      * -  merchant_id 二级商户的支付宝id
      * @param string $sub_merchant
-     * @return AlipayTradeParameter.php
+     * @return $this
      */
     public function setSubMerchant($sub_merchant = null)
     {
@@ -469,14 +469,17 @@ class AlipayTradeParameter extends TradeParameter
 
     protected function buildData()
     {
-        //@TODO 数组与json
         $params = array();
         foreach ($this->parameters as $key => $item){
-            if(isset($item['value']) &&  $item['value'] !== null){
-                $params[$key] = $item['value'];
+
+            if(empty($item['value']) === false){
+                if($item['type'] == 'json'){
+                    $params[$key] = json_encode($item['value'],JSON_UNESCAPED_UNICODE);
+                }else {
+                    $params[$key] = $item['value'];
+                }
             }
         }
-
         $this->parameter->checkParams();
 
         $data = $this->parameter->getData();

@@ -9,28 +9,31 @@
 namespace Payment\Alipay\Results;
 
 
-use Payment\AbstractResult;
 
-class AlipayTradeCloseResult extends AbstractResult
+class AlipayTradeCloseResult extends AlipayTradeResult
 {
     public function __construct($response)
     {
         parent::__construct($response);
+        $this->responseData = $this->response['alipay_trade_close_response'];
     }
 
-    public function code()
+    /**
+     * 支付宝交易号
+     * @return string|null
+     */
+    public function getTradeNo()
     {
-        // TODO: Implement code() method.
+        return array_value('trade_no',$this->responseData);
     }
 
-    public function message()
+    /**
+     * 创建交易传入的商户订单号
+     * @return string|null
+     */
+    public function getOutTradeNo()
     {
-        // TODO: Implement message() method.
-    }
-
-    public function data()
-    {
-        // TODO: Implement data() method.
+        return array_value('out_trade_no',$this->responseData);
     }
 
 }

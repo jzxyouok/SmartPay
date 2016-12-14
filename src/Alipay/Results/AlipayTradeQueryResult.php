@@ -19,41 +19,8 @@ use Payment\AbstractResult;
  * @package Payment\Alipay\Results
  *
  */
-class AlipayTradeQueryResult extends AbstractResult
+class AlipayTradeQueryResult extends AlipayTradeResult
 {
-    public function __construct($response)
-    {
-        parent::__construct($response);
-    }
-
-    public function code()
-    {
-        return $this->response['alipay_trade_query_response']['code'];
-    }
-
-    public function message()
-    {
-        return $this->response['alipay_trade_query_response']['msg'];
-    }
-
-    public function data()
-    {
-        return $this->response['alipay_trade_query_response'];
-    }
-
-
-    public function getSubCode()
-    {
-        return array_value('sub_code',$this->response['alipay_trade_query_response']);
-    }
-    public function getSubMsg()
-    {
-        return array_value('sub_msg',$this->response['alipay_trade_query_response']);
-    }
-    public function getSign()
-    {
-        return array_value('sign',$this->response['alipay_trade_query_response']);
-    }
 
     /**
      * 支付宝交易号

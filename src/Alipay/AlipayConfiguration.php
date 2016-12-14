@@ -18,7 +18,14 @@ use Payment\Configuration\PayConfiguration;
  */
 class AlipayConfiguration extends PayConfiguration
 {
+    /**
+     * 旧版支付宝支付接口网关
+     */
     const ALIPAY_GATEWAY = 'https://mapi.alipay.com/gateway.do?';
+    /**
+     * 新版蚂蚁金服支付宝网关
+     */
+    const OPEN_ALIPAY_GATEWAY = 'https://openapi.alipay.com/gateway.do';
 
     /**
      * 商家账号
@@ -27,5 +34,21 @@ class AlipayConfiguration extends PayConfiguration
     public function getPartner()
     {
         return isset($this->config['partner'])? $this->config['partner'] : null;
+    }
+    public function getRsaPrivatePath()
+    {
+        return array_value('rsa_private_path',$this->config);
+    }
+    public function getOpenRsaPrivatePath()
+    {
+        return array_value('open_rsa_private_path',$this->config);
+    }
+    public function getOpenRsaPublicPath()
+    {
+        return array_value('open_rsa_public_path  ',$this->config);
+    }
+    public function getKey()
+    {
+        return array_value('key',$this->config);
     }
 }
