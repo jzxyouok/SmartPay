@@ -200,7 +200,7 @@ class WechatRefundResult extends WechatResult
 
     /**
      *  退款代金券ID, $n为下标，从0开始编号
-     * 
+     *
      * @return array
      */
     public function getCouponRefundIds()
