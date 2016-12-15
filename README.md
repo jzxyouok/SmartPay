@@ -3,8 +3,8 @@ PHP实现的微信支付、支付宝支付以及银联支付的SDK。
 
 ## 支付宝接口与参数对应表
 
-|接口说明| 参数对象        | 支付宝接口名称           | 文档地址  |
-|-------------|:-------------|:-------------|:-----|
+|接口说明| 参数对象        | 支付宝接口名称   | 文档地址  |
+|-----------|:-----------|:-----------|:--------|
 |批量付款到支付宝账户有密接口| AlipayWapTransParameter     | batch_trans_notify | [支付宝文档](https://doc.open.alipay.com/docs/doc.htm?spm=a219a.7629140.0.0.0tOdsU&treeId=64&articleId=104804&docType=1)|
 |即时到账有密退款接口|AlipayWapRefundParameter|refund_fastpay_by_platform_pwd|[支付宝文档](https://doc.open.alipay.com/docs/doc.htm?spm=a219a.7629140.0.0.POEEBV&treeId=60&articleId=104744&docType=1)|
 |手机网站支付接口参数|AlipayWapOrderParameter|alipay.wap.create.direct.pay.by.user|[支付宝文档](https://doc.open.alipay.com/docs/doc.htm?spm=a219a.7386797.0.0.rK8ZWl&treeId=60&articleId=104790&docType=1)|
@@ -27,7 +27,7 @@ PHP实现的微信支付、支付宝支付以及银联支付的SDK。
 ## 支付宝回调通知对象说明
 
 |接口说明       | 参数对象       | 对应接口名称  | 文档地址    |
-|------------- |:------------- |: ---------- |:---------- |
+|-------------|:-------------|:----------|:----------|
 |【旧版】支付回调接口|AlipayWapOrderNotify|alipay.wap.create.direct.pay.by.user|[支付宝文档](https://doc.open.alipay.com/docs/doc.htm?spm=a219a.7629140.0.0.i5A1qh&treeId=60&articleId=104790&docType=1)|
 |【旧版】手机支付退款通知结果|AlipayWapRefundNotify|refund_fastpay_by_platform_pwd|[支付宝文档](https://doc.open.alipay.com/docs/doc.htm?spm=a219a.7629140.0.0.GhyLH2&treeId=60&articleId=104744&docType=1#s4)|
 |【旧版】即时到账交易接口|AlipayDirectNotify|create_direct_pay_by_user|[支付宝文档](https://doc.open.alipay.com/docs/doc.htm?spm=a219a.7629140.0.0.nfrT1f&treeId=108&articleId=104743&docType=1#s2)|
