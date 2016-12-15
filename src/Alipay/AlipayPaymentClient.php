@@ -8,6 +8,11 @@
 
 namespace Payment\Alipay;
 
+use Payment\Alipay\Parameters\AlipayAuthTokenParameter;
+use Payment\Alipay\Parameters\AlipayAuthUserInfoParameter;
+use Payment\Alipay\Parameters\AlipayAuthUserParameter;
+use Payment\Alipay\Parameters\AlipayTradeSettleParameter;
+use Payment\Alipay\Results\AlipayTokenResult;
 use Payment\Alipay\Results\AlipayTradeCloseResult;
 use Payment\Alipay\Results\AlipayTradeQrCodeResult;
 use Payment\Alipay\Results\AlipayTradeQueryResult;
@@ -16,6 +21,8 @@ use Payment\Alipay\Results\AlipayTradeRefundQueryResult;
 use Payment\Alipay\Results\AlipayTradeBillResult;
 use Payment\Alipay\Results\AlipayTradeCancelResult;
 use Payment\Alipay\Results\AlipayTradeOrderResult;
+use Payment\Alipay\Results\AlipayUserInfoResult;
+use Payment\Alipay\Results\AlipayUserResult;
 use Payment\Configuration\PayConfiguration;
 use Payment\Parameters\AppParameter;
 use Payment\Parameters\QrCodeParameter;
@@ -47,25 +54,6 @@ class AlipayPaymentClient extends PaymentClient
         mb_internal_encoding("UTF-8");
         parent::__construct($config);
 
-    }
-
-    public function unifiedOrder(PreOrderParameter $parameter)
-    {
-        $url = $this->config->get('alipay_url');
-
-        $data = http_build_query($parameter->getRequestData());
-
-        $header['content-type'] = 'application/x-www-form-urlencoded;charset=' . $this->config->get('charset','utf-8');
-
-        $result = $this->post($data,$url,30,null,$header);
-
-        return $result;
-    }
-
-
-    public function refund(RefundParameter $parameter)
-    {
-        return $this->handle($parameter);
     }
 
 
@@ -261,6 +249,62 @@ class AlipayPaymentClient extends PaymentClient
             $parameter->sign();
             $data = $parameter->getRequestData();
             return $data['sign'];
+        }
+        //统一收单交易结算接口
+        if($parameter instanceof AlipayTradeSettleParameter){
+            $parameter->sign();
+            $data = $parameter->getRequestData();
+
+            $url = $this->config->get('open_alipay_url') . '?' . http_build_query($data);
+
+            $result = $this->post($data,$url,30);
+
+            $json = json_decode($result,true);
+
+            return $json === null ? null : new AlipayTradeQrCodeResult($json);
+        }
+
+        //App用户登录换取授权访问令牌
+        if($parameter instanceof AlipayAuthTokenParameter){
+            $parameter->sign();
+            $data = $parameter->getRequestData();
+
+            $url = $this->config->get('open_alipay_url') . '?' . http_build_query($data);
+
+            $result = $this->post($data,$url,30);
+
+            $json = json_decode($result,true);
+
+            return $json === null ? null: new AlipayTokenResult($json);
+        }
+        if($parameter instanceof AlipayAuthUserParameter){
+            $parameter->sign();
+            $data = $parameter->getRequestData();
+
+            $url = $this->config->get('open_alipay_url') . '?' . http_build_query($data);
+
+           // print_r($data);exit;
+            $result = $this->post($data,$url,30);
+
+
+            $json = json_decode($result,true);
+
+            return $json === null ? null: new AlipayUserResult($json);
+        }
+        //支付宝钱包用户信息共享
+        if($parameter instanceof AlipayAuthUserInfoParameter){
+            $parameter->sign();
+            $data = $parameter->getRequestData();
+
+            $url = $this->config->get('open_alipay_url') . '?' . http_build_query($data);
+
+            // print_r($data);exit;
+            $result = $this->post($data,$url,30);
+
+
+            $json = json_decode($result,true);
+
+            return $json === null ? null: new AlipayUserInfoResult($json);
         }
         return null;
     }

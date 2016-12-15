@@ -1,6 +1,6 @@
 <?php
 
-namespace Payment\Wechat;
+namespace Payment\Wechat\Notices;
 
 use Payment\AbstractNotify;
 

@@ -14,9 +14,7 @@ use Payment\Configuration\PayConfiguration;
 /**
  * Class WechatConfiguration
  * @package Payment\Wechat
- * @property string $appid
- * @property string $mch_id
- * @property string $key
+ *
  */
 class WechatConfiguration extends PayConfiguration
 {
@@ -56,4 +54,17 @@ class WechatConfiguration extends PayConfiguration
      * @var string 撤销订单
      */
     public $reverse_url = 'https://api.mch.weixin.qq.com/secapi/pay/reverse';
+
+    public function getAppId()
+    {
+        return $this->appid;
+    }
+    public function getMchId()
+    {
+        return $this->mch_id;
+    }
+    public function getKey()
+    {
+        return $this->key;
+    }
 }

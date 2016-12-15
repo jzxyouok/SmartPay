@@ -19,23 +19,7 @@ use Payment\Support\Traits\AlipayParameterTrait;
  * @link https://doc.open.alipay.com/doc2/apiDetail.htm?spm=a219a.7629065.0.0.PlTwKb&apiId=862&docType=4
  *
  * @package Payment\Alipay\Parameters
- * @property string $out_trade_no
- * @property string $seller_id
- * @property string $total_amount
- * @property string $discountable_amount
- * @property string $undiscountable_amount
- * @property string $buyer_logon_id
- * @property string $subject
- * @property string $body
- * @property string $goods_detail
- * @property string $operator_id
- * @property string $store_id
- * @property string $terminal_id
- * @property string $extend_params
- * @property string $timeout_express
- * @property string $royalty_info
- * @property string $sub_merchant
- * @property string $alipay_store_id
+ *
  */
 class AlipayTradeQrCodeParameter extends QrCodeParameter
 {

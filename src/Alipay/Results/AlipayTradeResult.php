@@ -22,6 +22,9 @@ class AlipayTradeResult extends AbstractResult
     public function __construct($response)
     {
         parent::__construct($response);
+        if(isset($response['error_response'])){
+            $this->responseData = $response['error_response'];
+        }
     }
 
     /**
@@ -76,5 +79,10 @@ class AlipayTradeResult extends AbstractResult
     public function getSign()
     {
         return array_value('sign',$this->response);
+    }
+
+    public function __toString()
+    {
+        return json_encode($this->response,JSON_UNESCAPED_UNICODE);
     }
 }

@@ -52,6 +52,9 @@ abstract class PayConfiguration
      */
     public function get($key,$default = null)
     {
+        if(isset($this->$key)){
+            return $this->$key;
+        }
         if(isset($this->config[$key])){
             return $this->config[$key];
         }
@@ -60,7 +63,7 @@ abstract class PayConfiguration
 
     public function __isset($name)
     {
-        return isset($this->config[$name]);
+        return  isset($this->$name) || isset($this->config[$name]);
     }
 
     /**

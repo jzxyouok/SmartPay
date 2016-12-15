@@ -24,6 +24,9 @@ use Payment\Parameters\ReportParameter;
 use Payment\Parameters\ReverseParameter;
 use Payment\Parameters\TradeParameter;
 use Payment\Wechat\Parameters\WechatShortUrlParameter;
+use Payment\Wechat\Results\WechatOrderQueryResult;
+use Payment\Wechat\Results\WechatResult;
+use Payment\Wechat\Results\WechatUnifiedOrderResult;
 
 /**
  * 微信支付接口
@@ -86,9 +89,7 @@ class WechatPaymentClient extends PaymentClient
 
             $responseText = $this->post($param, $url);
 
-            $response = convert_xml_to_array($responseText);
-
-            $result = new WechatResult($response);
+            $result = new WechatUnifiedOrderResult($responseText);
 
             return $result;
         }
@@ -103,9 +104,7 @@ class WechatPaymentClient extends PaymentClient
 
             $responseText = $this->post($param, $url);
 
-            $response = convert_xml_to_array($responseText);
-
-            $result = new WechatResult($response);
+            $result = new WechatOrderQueryResult($responseText);
 
             return $result;
         }

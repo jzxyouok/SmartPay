@@ -87,16 +87,16 @@ class WechatQueryOrderParameter extends QueryOrderParameter
     protected function buildData()
     {
         if(!array_key_exists('appid',$this->requestData)){
-            $this->requestData['appid'] = $this->config->get('app_id');
+            $this->requestData['appid'] = $this->getAppId();
         }
         if(!array_key_exists('mch_id',$this->requestData)){
-            $this->requestData['mch_id'] = $this->config->get('mch_id');
+            $this->requestData['mch_id'] = $this->getMchId();
         }
         if(!array_key_exists('nonce_str',$this->requestData)){
             $this->requestData['nonce_str'] = create_random(32);
         }
         if(!array_key_exists(' sign_type ',$this->requestData)){
-            $this->requestData[' sign_type '] = 'MD5';
+            $this->requestData['sign_type'] = 'MD5';
         }
     }
 
@@ -110,7 +110,7 @@ class WechatQueryOrderParameter extends QueryOrderParameter
             throw new PaymentException('提交被扫支付API接口中，缺少必填参数 mch_id');
         }
 
-        if(!array_key_exists('transaction_id ',$this->requestData) && !array_key_exists('out_trade_no ',$this->requestData)){
+        if(!array_key_exists('transaction_id',$this->requestData) && !array_key_exists('out_trade_no',$this->requestData)){
             throw new PaymentException('订单查询接口中，out_trade_no、transaction_id至少填一个');
         }
 
