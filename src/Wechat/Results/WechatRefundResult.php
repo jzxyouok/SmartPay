@@ -25,7 +25,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getDeviceInfo()
     {
-        return array_value('device_info',$this->response);
+        return $this->getValue('device_info');
     }
 
     /**
@@ -34,7 +34,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getTransactionId()
     {
-        return array_value('transaction_id',$this->response);
+        return $this->getValue('transaction_id');
     }
 
     /**
@@ -43,7 +43,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getOutTradeNo()
     {
-        return array_value('out_trade_no',$this->response);
+        return $this->getValue('out_trade_no');
     }
 
     /**
@@ -52,7 +52,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getOutRefundNo()
     {
-        return array_value('out_refund_no',$this->response);
+        return $this->getValue('out_refund_no');
     }
 
     /**
@@ -61,7 +61,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getRefundId()
     {
-        return array_value('refund_id',$this->response);
+        return $this->getValue('refund_id');
     }
 
     /**
@@ -72,7 +72,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getRefundChannel()
     {
-        return array_value('refund_channel',$this->response);
+        return $this->getValue('refund_channel');
     }
 
     /**
@@ -81,7 +81,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getRefundFee()
     {
-        return array_value('refund_fee',$this->response);
+        return $this->getValue('refund_fee');
     }
 
     /**
@@ -92,7 +92,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getSettlementRefundFee()
     {
-        return array_value('settlement_refund_fee',$this->response);
+        return $this->getValue('settlement_refund_fee');
     }
 
     /**
@@ -102,7 +102,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getTotalFee()
     {
-        return array_value('total_fee',$this->response);
+        return $this->getValue('total_fee');
     }
 
     /**
@@ -112,7 +112,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getSettlementTotalFee()
     {
-        return array_value('settlement_total_fee',$this->response);
+        return $this->getValue('settlement_total_fee');
     }
 
     /**
@@ -121,7 +121,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getFeeType()
     {
-        return array_value('fee_type',$this->response);
+        return $this->getValue('fee_type');
     }
 
     /**
@@ -130,7 +130,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getCashFee()
     {
-        return array_value('cash_fee',$this->response);
+        return $this->getValue('cash_fee');
     }
 
     /**
@@ -139,7 +139,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getCashFeeType()
     {
-        return array_value('cash_fee_type',$this->response);
+        return $this->getValue('cash_fee_type');
     }
 
     /**
@@ -148,7 +148,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getCashRefundFee()
     {
-        return array_value('cash_refund_fee',$this->response);
+        return $this->getValue('cash_refund_fee');
     }
 
     /**
@@ -161,8 +161,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getCouponTypes()
     {
-        return $this->coupon_types;
-        return array_value('',$this->response);
+        return $this->matchValue('coupon_type_');
     }
 
     /**
@@ -174,7 +173,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getCouponRefundFee()
     {
-        return array_value('coupon_refund_fee',$this->response);
+        return $this->getValue('coupon_refund_fee');
     }
 
     /**
@@ -184,8 +183,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getCouponRefundFees()
     {
-        return $this->coupon_refund_fees;
-        return array_value('',$this->response);
+        return $this->matchValue('coupon_refund_fee_');
     }
 
     /**
@@ -195,7 +193,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getCouponRefundCount()
     {
-        return array_value('coupon_refund_count',$this->response);
+        return $this->getValue('coupon_refund_count');
     }
 
     /**
@@ -205,8 +203,7 @@ class WechatRefundResult extends WechatResult
      */
     public function getCouponRefundIds()
     {
-        return $this->coupon_refund_ids;
-        return array_value('',$this->response);
+        return $this->matchValue('coupon_refund_id_');
     }
 
 }

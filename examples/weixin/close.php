@@ -6,7 +6,7 @@
  * Time: 9:39
  */
 
-require_once __DIR__ . '/../autoload.php';
+require_once __DIR__ . '/../../autoload.php';
 
 use Payment\Wechat\Parameters\WechatCloseOrderParameter;
 use Payment\Wechat\WechatConfiguration;
@@ -21,5 +21,9 @@ $params = new WechatCloseOrderParameter($config->appid,$config->mch_id,$config->
 $params->setOutTradeNo('');
 
 //初始化服务提供对象
-$provider = new WechatPaymentClient($config);
-$provider->closeOrder($params);
+$client = new WechatPaymentClient($config);
+//$client->closeOrder($params);
+
+$json = json_decode('{"name":Null}',true);
+
+var_dump($json['name']);

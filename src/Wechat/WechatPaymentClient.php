@@ -24,8 +24,12 @@ use Payment\Parameters\ReportParameter;
 use Payment\Parameters\ReverseParameter;
 use Payment\Parameters\TradeParameter;
 use Payment\Wechat\Parameters\WechatShortUrlParameter;
+use Payment\Wechat\Results\WechatMicropayResult;
 use Payment\Wechat\Results\WechatOrderQueryResult;
+use Payment\Wechat\Results\WechatRefundQueryResult;
+use Payment\Wechat\Results\WechatRefundResult;
 use Payment\Wechat\Results\WechatResult;
+use Payment\Wechat\Results\WechatReverseResult;
 use Payment\Wechat\Results\WechatUnifiedOrderResult;
 
 /**
@@ -72,9 +76,7 @@ class WechatPaymentClient extends PaymentClient
 
             $responseText = $this->post($param, $url);
 
-            $response = convert_xml_to_array($responseText);
-
-            $result = new WechatResult($response);
+            $result = new WechatMicropayResult($responseText);
 
             return $result;
         }
@@ -119,9 +121,7 @@ class WechatPaymentClient extends PaymentClient
 
             $responseText = $this->post($param, $url);
 
-            $response = convert_xml_to_array($responseText);
-
-            $result = new WechatResult($response);
+            $result = new WechatResult($responseText);
 
             return $result;
         }
@@ -143,9 +143,8 @@ class WechatPaymentClient extends PaymentClient
 
             $responseText = $this->post($param, $url,$this->config->get('sslcert'));
 
-            $response = convert_xml_to_array($responseText);
 
-            $result = new WechatResult($response);
+            $result = new WechatRefundResult($responseText);
 
             return $result;
         }
@@ -160,9 +159,8 @@ class WechatPaymentClient extends PaymentClient
 
             $responseText = $this->post($param, $url);
 
-            $response = convert_xml_to_array($responseText);
 
-            $result = new WechatResult($response);
+            $result = new WechatRefundQueryResult($responseText);
 
             return $result;
         }
@@ -226,9 +224,8 @@ class WechatPaymentClient extends PaymentClient
 
             $responseText = $this->post($param, $url,$this->config->get('sslcert'));
 
-            $response = convert_xml_to_array($responseText);
 
-            $result = new WechatResult($response);
+            $result = new WechatReverseResult($responseText);
 
             return $result;
         }

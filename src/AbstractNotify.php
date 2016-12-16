@@ -21,7 +21,8 @@ use Payment\Exceptions\PaymentException;
 abstract class AbstractNotify
 {
     protected $config;
-    protected $requestData;
+    protected $requestData = [];
+    protected $cache = [];
 
     public function __construct(PayConfiguration $config)
     {

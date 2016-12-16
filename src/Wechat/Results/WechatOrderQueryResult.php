@@ -26,7 +26,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getDeviceInfo()
     {
-        return array_value('device_info',$this->response);
+        return $this->getValue('device_info');
     }
 
     /**
@@ -36,7 +36,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getOpenid()
     {
-        return array_value('openid',$this->response);
+        return $this->getValue('openid');
     }
 
     /**
@@ -46,7 +46,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getIsSubscribe()
     {
-        return array_value('is_subscribe',$this->response) == 'T';
+        return $this->getValue('is_subscribe') == 'T';
     }
 
     /**
@@ -56,7 +56,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getTradeType()
     {
-        return array_value('trade_type',$this->response);
+        return $this->getValue('trade_type');
     }
 
     /**
@@ -73,7 +73,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getTradeState()
     {
-        return array_value('trade_state',$this->response);
+        return $this->getValue('trade_state');
     }
 
     /**
@@ -83,7 +83,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getBankType()
     {
-        return array_value('bank_type',$this->response);
+        return $this->getValue('bank_type');
     }
 
     /**
@@ -92,7 +92,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getTotalFee()
     {
-        return array_value('total_fee',$this->response);
+        return $this->getValue('total_fee');
     }
 
     /**
@@ -102,7 +102,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getSettlementTotalFee()
     {
-        return array_value('settlement_total_fee',$this->response);
+        return $this->getValue('settlement_total_fee');
     }
 
     /**
@@ -112,7 +112,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getFeeType()
     {
-        return array_value('fee_type',$this->response);
+        return $this->getValue('fee_type');
     }
 
     /**
@@ -122,7 +122,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getCashFee()
     {
-        return array_value('cash_fee',$this->response);
+        return $this->getValue('cash_fee');
     }
 
     /**
@@ -132,7 +132,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getCashFeeType()
     {
-        return array_value('cash_fee_type',$this->response);
+        return $this->getValue('cash_fee_type');
     }
 
     /**
@@ -144,7 +144,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getCouponFee()
     {
-        return array_value('coupon_fee',$this->response);
+        return $this->getValue('coupon_fee');
     }
 
     /**
@@ -153,7 +153,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getCouponCount()
     {
-        return array_value('coupon_count',$this->response);
+        return $this->getValue('coupon_count');
     }
 
     /**
@@ -165,13 +165,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getCouponTypes()
     {
-        $results = [];
-        foreach ($this->response as $key=>$value){
-            if(stripos($key,'coupon_type_') === 0){
-                $results[] = $value;
-            }
-        }
-        return $results;
+        return $this->matchValue('coupon_type_');
     }
 
     /**
@@ -181,13 +175,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getCouponIds()
     {
-        $results = [];
-        foreach ($this->response as $key=>$value){
-            if(stripos($key,'coupon_id_') === 0){
-                $results[] = $value;
-            }
-        }
-        return $results;
+        return $this->matchValue('coupon_id_');
     }
 
     /**
@@ -197,13 +185,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getCouponFees()
     {
-        $results = [];
-        foreach ($this->response as $key=>$value){
-            if(stripos($key,'coupon_fee_') === 0){
-                $results[] = $value;
-            }
-        }
-        return $results;
+        return $this->matchValue('coupon_fee_');
     }
 
     /**
@@ -213,7 +195,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getTransactionId()
     {
-        return array_value('transaction_id',$this->response);
+        return $this->getValue('transaction_id');
     }
 
     /**
@@ -222,7 +204,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getOutTradeNo()
     {
-        return array_value('out_trade_no',$this->response);
+        return $this->getValue('out_trade_no');
     }
 
     /**
@@ -231,7 +213,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getAttach()
     {
-        return array_value('attach',$this->response);
+        return $this->getValue('attach');
     }
 
     /**
@@ -241,7 +223,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getTimeEnd()
     {
-        return array_value('time_end',$this->response);
+        return $this->getValue('time_end');
     }
 
     /**
@@ -251,7 +233,7 @@ class WechatOrderQueryResult extends WechatResult
      */
     public function getTradeStateDesc()
     {
-        return array_value('trade_state_desc',$this->response);
+        return $this->getValue('trade_state_desc');
     }
 
 }

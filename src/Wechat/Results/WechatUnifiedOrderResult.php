@@ -24,7 +24,7 @@ class WechatUnifiedOrderResult extends WechatResult
      */
     public function getDeviceInfo()
     {
-        return array_value('device_info',$this->response);
+        return $this->getValue('device_info');
     }
 
     /**
@@ -33,7 +33,7 @@ class WechatUnifiedOrderResult extends WechatResult
      */
     public function getTradeType()
     {
-        return array_value('trade_type',$this->response);
+        return $this->getValue('trade_type');
     }
 
     /**
@@ -42,7 +42,7 @@ class WechatUnifiedOrderResult extends WechatResult
      */
     public function getPrepayId()
     {
-        return array_value('prepay_id',$this->response);
+        return $this->getValue('prepay_id');
     }
 
     /**
@@ -51,7 +51,7 @@ class WechatUnifiedOrderResult extends WechatResult
      */
     public function getCodeUrl()
     {
-        return array_value('code_url',$this->response);
+        return $this->getValue('code_url');
     }
 
 }
